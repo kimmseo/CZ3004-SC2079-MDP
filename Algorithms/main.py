@@ -1,4 +1,5 @@
 import time
+import logging
 from algo.algo import MazeSolver
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -88,7 +89,8 @@ def path_finding():
     })
 
     # For testing
-    print(commands)
+    app.logger.warning(commands)
+    # print(commands)
 
 
 @app.route('/image', methods=['POST'])
