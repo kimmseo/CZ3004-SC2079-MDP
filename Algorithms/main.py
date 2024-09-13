@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 #model = load_model()
 model = None
-@app.route('/status', methods=['GET'])
+# @app.route('/status', methods=['GET'])
 def status():
     """
     This is a health check endpoint to check if the server is running
@@ -20,8 +20,8 @@ def status():
     return jsonify({"result": "ok"})
 
 
-@app.route('/path', methods=['POST'])
-def path_finding():
+# @app.route('/path', methods=['POST'])
+def main():
     """
     This is the main endpoint for the path finding algorithm
     :return: a json object with a key "data" and value a dictionary with keys "distance", "path", and "commands"
@@ -79,6 +79,7 @@ def path_finding():
         else:
             i += 1
         path_results.append(optimal_path[i].get_dict())
+    '''
     return jsonify({
         "data": {
             'distance': distance,
@@ -87,13 +88,15 @@ def path_finding():
         },
         "error": None
     })
+    '''
 
     # For testing
-    app.logger.warning(commands)
-    # print(commands)
+    # app.logger.warning(commands)
+    print(commands)
 
 
-@app.route('/image', methods=['POST'])
+'''
+# @app.route('/image', methods=['POST'])
 def image_predict():
     """
     This is the main endpoint for the image prediction algorithm
@@ -121,7 +124,7 @@ def image_predict():
     }
     return jsonify(result)
 
-@app.route('/stitch', methods=['GET'])
+# @app.route('/stitch', methods=['GET'])
 def stitch():
     """
     This is the main endpoint for the stitching command. Stitches the images using two different functions, in effect creating two stitches, just for redundancy purposes
@@ -131,6 +134,9 @@ def stitch():
     img2 = stitch_image_own()
     img2.show()
     return jsonify({"result": "ok"})
-
+'''
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Run Flask server - main inference server
+    # app.run(host='0.0.0.0', port=5000, debug=True)
+    # For debugging:
+    main()
