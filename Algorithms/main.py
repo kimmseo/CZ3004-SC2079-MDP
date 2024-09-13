@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 #model = load_model()
 model = None
-# @app.route('/status', methods=['GET'])
+@app.route('/status', methods=['GET'])
 def status():
     """
     This is a health check endpoint to check if the server is running
@@ -20,7 +20,7 @@ def status():
     return jsonify({"result": "ok"})
 
 
-# @app.route('/path', methods=['POST'])
+@app.route('/path', methods=['POST'])
 def main():
     """
     This is the main endpoint for the path finding algorithm
@@ -137,6 +137,7 @@ def stitch():
 '''
 if __name__ == '__main__':
     # Run Flask server - main inference server
-    # app.run(host='0.0.0.0', port=5000, debug=True)
+    print(app.url_map)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     # For debugging:
-    main()
+    # main()
