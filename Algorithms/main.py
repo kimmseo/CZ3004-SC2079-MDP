@@ -28,25 +28,25 @@ def main():
     """
     # Get the json data from the request
     # Below is actual code
-    # content = request.json
+    content = request.json
 
     # Get the obstacles, big_turn, retrying, robot_x, robot_y, and robot_direction from the json data
     # Below is actual code
-    # obstacles = content['obstacles']
+    obstacles = content['obstacles']
     # Below is sample test
-    obstacles = [{'x': 6, 'y': 5, 'd': 6, 'id': 0}, {'x': 7, 'y': 8, 'd': 6, 'id': 1}, {'x': 18, 'y': 8, 'd': 6, 'id': 2} ,
-                 {'x': 11, 'y': 2, 'd': 6, 'id': 3}, {'x': 16, 'y': 15, 'd': 6, 'id': 4}]
+    # obstacles = [{'x': 6, 'y': 5, 'd': 6, 'id': 0}, {'x': 7, 'y': 8, 'd': 6, 'id': 1}, {'x': 18, 'y': 8, 'd': 6, 'id': 2} ,
+    #              {'x': 11, 'y': 2, 'd': 6, 'id': 3}, {'x': 16, 'y': 15, 'd': 6, 'id': 4}]
     # Below is actual code
-    # big_turn = int(content['big_turn'])
-    # retrying = content['retrying']
-    # robot_x, robot_y = content['robot_x'], content['robot_y']
-    # robot_direction = int(content['robot_dir'])
+    big_turn = int(content['big_turn'])
+    retrying = content['retrying']
+    robot_x, robot_y = content['robot_x'], content['robot_y']
+    robot_direction = int(content['robot_dir'])
 
     # Initialize MazeSolver object with robot size of 20x20, bottom left corner of robot at (1,1), facing north, and whether to use a big turn or not.
     # Below is actual code
-    # maze_solver = MazeSolver(20, 20, robot_x, robot_y, robot_direction, big_turn=None)
+    maze_solver = MazeSolver(20, 20, robot_x, robot_y, robot_direction, big_turn=None)
     # Below is sample test
-    maze_solver = MazeSolver(20, 20, 1, 1, Direction.NORTH, big_turn=None)
+    # maze_solver = MazeSolver(20, 20, 1, 1, Direction.NORTH, big_turn=None)
 
     # Add each obstacle into the MazeSolver. Each obstacle is defined by its x,y positions, its direction, and its id
     for ob in obstacles:
@@ -79,7 +79,6 @@ def main():
         else:
             i += 1
         path_results.append(optimal_path[i].get_dict())
-    '''
     return jsonify({
         "data": {
             'distance': distance,
@@ -88,14 +87,12 @@ def main():
         },
         "error": None
     })
-    '''
 
     # For testing
     # app.logger.warning(commands)
     print(commands)
 
 
-'''
 # @app.route('/image', methods=['POST'])
 def image_predict():
     """
@@ -134,7 +131,7 @@ def stitch():
     img2 = stitch_image_own()
     img2.show()
     return jsonify({"result": "ok"})
-'''
+
 if __name__ == '__main__':
     # Run Flask server - main inference server
     print(app.url_map)
