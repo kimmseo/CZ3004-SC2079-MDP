@@ -16,7 +16,7 @@ export var methodType = {get : 'GET', post : 'POST', put : 'PUT', delete : 'DELE
 
 export default class BaseAPI {
 	static JSONRequest(api, method, headers, options, content) {
-		const host = "https://localhost:5000/";
+		const host = "http://127.0.0.1:5000/";
 
 		let requestOptions = {
 			method: method,
