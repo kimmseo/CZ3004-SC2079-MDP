@@ -5,7 +5,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from model import *
 from helper import command_generator
-from consts import Direction
 
 app = Flask(__name__)
 CORS(app)
@@ -37,16 +36,19 @@ def main():
     # obstacles = [{'x': 6, 'y': 5, 'd': 6, 'id': 0}, {'x': 7, 'y': 8, 'd': 6, 'id': 1}, {'x': 18, 'y': 8, 'd': 6, 'id': 2} ,
     #              {'x': 11, 'y': 2, 'd': 6, 'id': 3}, {'x': 16, 'y': 15, 'd': 6, 'id': 4}]
     # Below is actual code
+
     # big_turn = int(content['big_turn'])
     retrying = content['retrying']
     robot_x, robot_y = content['robot_x'], content['robot_y']
     robot_direction = int(content['robot_dir'])
 
     # Initialize MazeSolver object with robot size of 20x20, bottom left corner of robot at (1,1), facing north, and whether to use a big turn or not.
+
     # Below is actual code
     maze_solver = MazeSolver(20, 20, robot_x, robot_y, robot_direction, big_turn=None)
     # Below is sample test
     # maze_solver = MazeSolver(20, 20, 1, 1, Direction.NORTH, big_turn=None)
+
 
     # Add each obstacle into the MazeSolver. Each obstacle is defined by its x,y positions, its direction, and its id
     for ob in obstacles:
@@ -54,12 +56,10 @@ def main():
 
     start = time.time()
     # Get shortest path
-    # optimal_path, distance = maze_solver.get_optimal_order_dp(retrying=retrying)
-    optimal_path, distance = maze_solver.get_optimal_order_dp(retrying=True)
-
+    optimal_path, distance = maze_solver.get_optimal_order_dp(retrying=retrying)
     print(f"Time taken to find shortest path using A* search: {time.time() - start}s")
     print(f"Distance to travel: {distance} units")
-
+    
     # Based on the shortest path, generate commands for the robot
     commands = command_generator(optimal_path, obstacles)
 
@@ -106,11 +106,11 @@ def image_predict():
     constituents = file.filename.split("_")
     obstacle_id = constituents[1]
 
-    ## Week 8 ##
+    ## Week 8 ## 
     #signal = constituents[2].strip(".jpg")
     #image_id = predict_image(filename, model, signal)
 
-    ## Week 9 ##
+    ## Week 9 ## 
     # We don't need to pass in the signal anymore
     image_id = predict_image_week_9(filename,model)
 
