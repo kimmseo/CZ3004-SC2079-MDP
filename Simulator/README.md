@@ -1,6 +1,5 @@
 <br />
 <p align="center">
-  <img src="/images/Map.png" alt="Logo" height=150 >
   <h1 align="center">
     CZ3004/SC2079 Multidisciplinary Project - Algorithm Simulator
   </h1>
