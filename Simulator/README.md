@@ -27,11 +27,7 @@ The app will be running at `localhost:3000`
 
 Position the robot where you want it to be and click on the buttons to add obstacles. Then click on `Submit` to find the path, or `Reset All` to clear the map and put the robot back to the starting position. `Reset Robot` just resets the robot to the starting position without clearing the map.
 
-<div style="text-align:center"><img src="/images/1.jpg" alt="Interface" width=350 ></div>
-
 Add obstacles without a symbol card by choosing the 'None' option for the direction.
-
-<div style="text-align:center"><img src="/images/3.jpg" alt="Interface" width=350 ></div>
 
 Use the left and right arrow buttons to go through the path step by step to see how the algorithm is working.
 
