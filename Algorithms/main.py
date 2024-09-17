@@ -1,5 +1,6 @@
 import time
-from algo.algo import MazeSolver 
+import logging
+from algo.algo import MazeSolver
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from model import *
@@ -19,23 +20,35 @@ def status():
 
 
 @app.route('/path', methods=['POST'])
-def path_finding():
+def main():
     """
     This is the main endpoint for the path finding algorithm
     :return: a json object with a key "data" and value a dictionary with keys "distance", "path", and "commands"
     """
     # Get the json data from the request
+    # Below is actual code
     content = request.json
 
     # Get the obstacles, big_turn, retrying, robot_x, robot_y, and robot_direction from the json data
+    # Below is actual code
     obstacles = content['obstacles']
+    # Below is sample test
+    # obstacles = [{'x': 6, 'y': 5, 'd': 6, 'id': 0}, {'x': 7, 'y': 8, 'd': 6, 'id': 1}, {'x': 18, 'y': 8, 'd': 6, 'id': 2} ,
+    #              {'x': 11, 'y': 2, 'd': 6, 'id': 3}, {'x': 16, 'y': 15, 'd': 6, 'id': 4}]
+    # Below is actual code
+
     # big_turn = int(content['big_turn'])
     retrying = content['retrying']
     robot_x, robot_y = content['robot_x'], content['robot_y']
     robot_direction = int(content['robot_dir'])
 
     # Initialize MazeSolver object with robot size of 20x20, bottom left corner of robot at (1,1), facing north, and whether to use a big turn or not.
+
+    # Below is actual code
     maze_solver = MazeSolver(20, 20, robot_x, robot_y, robot_direction, big_turn=None)
+    # Below is sample test
+    # maze_solver = MazeSolver(20, 20, 1, 1, Direction.NORTH, big_turn=None)
+
 
     # Add each obstacle into the MazeSolver. Each obstacle is defined by its x,y positions, its direction, and its id
     for ob in obstacles:
@@ -75,8 +88,12 @@ def path_finding():
         "error": None
     })
 
+    # For testing
+    # app.logger.warning(commands)
+    print(commands)
 
-@app.route('/image', methods=['POST'])
+
+# @app.route('/image', methods=['POST'])
 def image_predict():
     """
     This is the main endpoint for the image prediction algorithm
@@ -104,7 +121,7 @@ def image_predict():
     }
     return jsonify(result)
 
-@app.route('/stitch', methods=['GET'])
+# @app.route('/stitch', methods=['GET'])
 def stitch():
     """
     This is the main endpoint for the stitching command. Stitches the images using two different functions, in effect creating two stitches, just for redundancy purposes
@@ -116,4 +133,8 @@ def stitch():
     return jsonify({"result": "ok"})
 
 if __name__ == '__main__':
+    # Run Flask server - main inference server
+    # print(app.url_map)
     app.run(host='0.0.0.0', port=5000, debug=True)
+    # For debugging:
+    # main()

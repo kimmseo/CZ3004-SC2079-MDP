@@ -168,6 +168,7 @@ class MazeSolver:
                         cost_np[e][s] = cost_np[s][e]
                 cost_np[:, 0] = 0
                 _permutation, _distance = solve_tsp_dynamic_programming(cost_np)
+                # For testing
                 # print(f"fixed_cost = {fixed_cost}")
                 # print(f"distance = {_distance}")
                 if _distance + fixed_cost >= distance:
