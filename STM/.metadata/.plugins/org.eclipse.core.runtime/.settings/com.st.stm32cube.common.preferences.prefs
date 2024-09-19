@@ -1,0 +1,8 @@
+DeviceConfigurationTool..UpdaterCheckInterval=5
+DeviceConfigurationTool..UpdaterDataRefresh=dataRefreshDataOnly
+DeviceConfigurationTool..UpdaterDataRefreshInterfval=3
+DeviceConfigurationTool.AskToSwitchToCdtPerspective=false
+DeviceConfigurationTool.AskToSwitchToCubeMxPerspective=false
+DeviceConfigurationTool.SwitchToCdtPerspective=true
+DeviceConfigurationTool.SwitchToCubeMxPerspective=true
+eclipse.preferences.version=1

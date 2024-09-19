@@ -1,0 +1,127 @@
+16:32:58 **** Incremental Build of configuration Debug for project MDP Group 19 ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:154:7: warning: type defaults to 'int' in declaration of 'pwmval' [-Wimplicit-int]
+  154 | const pwmval=2000; //Straight speed
+      |       ^~~~~~
+../Core/Src/main.c:155:7: warning: type defaults to 'int' in declaration of 'pwmval2' [-Wimplicit-int]
+  155 | const pwmval2=1500; //Turning speed
+      |       ^~~~~~~
+../Core/Src/main.c:162:1: warning: data definition has no type or storage class
+  162 | pwm_L_f = 1400; //Speed 2500 > 1950, 4000 > 3120, 3200 > 2500
+      | ^~~~~~~
+../Core/Src/main.c:162:1: warning: type defaults to 'int' in declaration of 'pwm_L_f' [-Wimplicit-int]
+../Core/Src/main.c:163:1: warning: data definition has no type or storage class
+  163 | pwm_L_b = 1625; //Speed 2500 > 2050, 4000 > 3280, 3200 > 2625
+      | ^~~~~~~
+../Core/Src/main.c:163:1: warning: type defaults to 'int' in declaration of 'pwm_L_b' [-Wimplicit-int]
+../Core/Src/main.c:164:1: warning: data definition has no type or storage class
+  164 | pwm_R_f = 1400; //Speed 2500 > 2050, 4000 > 3280, 3200 > 2625
+      | ^~~~~~~
+../Core/Src/main.c:164:1: warning: type defaults to 'int' in declaration of 'pwm_R_f' [-Wimplicit-int]
+../Core/Src/main.c:165:1: warning: data definition has no type or storage class
+  165 | pwm_R_b = 1525; //Speed 2500 > 2100, 4000 > 3360, 3200 > 2690
+      | ^~~~~~~
+../Core/Src/main.c:165:1: warning: type defaults to 'int' in declaration of 'pwm_R_b' [-Wimplicit-int]
+../Core/Src/main.c:192:18: warning: unsigned conversion from 'int' to 'uint8_t' {aka 'unsigned char'} changes value from '999' to '231' [-Woverflow]
+  192 | uint8_t Distance=999;
+      |                  ^~~
+../Core/Src/main.c:193:12: warning: unsigned conversion from 'int' to 'uint8_t' {aka 'unsigned char'} changes value from '999' to '231' [-Woverflow]
+  193 | uint8_t UD=999;
+      |            ^~~
+../Core/Src/main.c: In function 'encoder':
+../Core/Src/main.c:1265:17: warning: unused variable 'dirB' [-Wunused-variable]
+ 1265 |  uint16_t dirA, dirB;
+      |                 ^~~~
+../Core/Src/main.c:1265:11: warning: unused variable 'dirA' [-Wunused-variable]
+ 1265 |  uint16_t dirA, dirB;
+      |           ^~~~
+../Core/Src/main.c:1264:27: warning: variable 'T' set but not used [-Wunused-but-set-variable]
+ 1264 |  uint32_t tick, cur_tick, T;
+      |                           ^
+../Core/Src/main.c: In function 'ultrasonic_task':
+../Core/Src/main.c:1439:28: warning: implicit declaration of function 'roundf' [-Wimplicit-function-declaration]
+ 1439 |   irBufferL[bufferIndex] = roundf(29.988 * pow(volt, -1.173));
+      |                            ^~~~~~
+../Core/Src/main.c:1439:28: warning: incompatible implicit declaration of built-in function 'roundf'
+../Core/Src/main.c:27:1: note: include '<math.h>' or provide a declaration of 'roundf'
+   26 | #include "PID.h"
+  +++ |+#include <math.h>
+   27 | /* USER CODE END Includes */
+../Core/Src/main.c:1439:44: warning: implicit declaration of function 'pow' [-Wimplicit-function-declaration]
+ 1439 |   irBufferL[bufferIndex] = roundf(29.988 * pow(volt, -1.173));
+      |                                            ^~~
+../Core/Src/main.c:1439:44: warning: incompatible implicit declaration of built-in function 'pow'
+../Core/Src/main.c:1439:44: note: include '<math.h>' or provide a declaration of 'pow'
+../Core/Src/main.c:1444:19: warning: unused variable 'sumR' [-Wunused-variable]
+ 1444 |   float sumL = 0, sumR = 0;
+      |                   ^~~~
+../Core/Src/main.c: In function 'show_task':
+../Core/Src/main.c:1505:4: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+ 1505 |    sprintf(motorA, "DST L: %5d\0", (int)LEFTWHEEL_DIST);
+      |    ^~~~~~~
+../Core/Src/main.c:1505:4: warning: incompatible implicit declaration of built-in function 'sprintf'
+../Core/Src/main.c:27:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   26 | #include "PID.h"
+  +++ |+#include <stdio.h>
+   27 | /* USER CODE END Includes */
+../Core/Src/main.c:1505:12: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+ 1505 |    sprintf(motorA, "DST L: %5d\0", (int)LEFTWHEEL_DIST);
+      |            ^~~~~~
+      |            |
+      |            uint8_t * {aka unsigned char *}
+../Core/Src/main.c:1505:12: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1505:31: warning: embedded '\0' in format [-Wformat-contains-nul]
+ 1505 |    sprintf(motorA, "DST L: %5d\0", (int)LEFTWHEEL_DIST);
+      |                               ^~
+../Core/Src/main.c:1506:12: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+ 1506 |    sprintf(motorB, "DST R: %5d\0", (int)RIGHTWHEEL_DIST);
+      |            ^~~~~~
+      |            |
+      |            uint8_t * {aka unsigned char *}
+../Core/Src/main.c:1506:12: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1506:31: warning: embedded '\0' in format [-Wformat-contains-nul]
+ 1506 |    sprintf(motorB, "DST R: %5d\0", (int)RIGHTWHEEL_DIST);
+      |                               ^~
+../Core/Src/main.c:1507:12: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+ 1507 |    sprintf(Angle, "ANGLE: %6d\0", (int)(TURNING_ANGLE));
+      |            ^~~~~
+      |            |
+      |            uint8_t * {aka unsigned char *}
+../Core/Src/main.c:1507:12: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1507:30: warning: embedded '\0' in format [-Wformat-contains-nul]
+ 1507 |    sprintf(Angle, "ANGLE: %6d\0", (int)(TURNING_ANGLE));
+      |                              ^~
+../Core/Src/main.c:1508:12: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+ 1508 |    sprintf(dist, "DIST: %5d CM", Distance);
+      |            ^~~~
+      |            |
+      |            uint8_t * {aka unsigned char *}
+../Core/Src/main.c:1508:12: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1509:12: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+ 1509 |    sprintf(IRleft, "IR_L: %5d\0", (int)ir_distL_Avg);
+      |            ^~~~~~
+      |            |
+      |            uint8_t * {aka unsigned char *}
+../Core/Src/main.c:1509:12: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1509:30: warning: embedded '\0' in format [-Wformat-contains-nul]
+ 1509 |    sprintf(IRleft, "IR_L: %5d\0", (int)ir_distL_Avg);
+      |                              ^~
+arm-none-eabi-gcc -o "MDP Group 19.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\MDP Group 19\MDP Group 19\MDP Group 19\STM32F407VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MDP Group 19.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: MDP Group 19.elf
+ 
+arm-none-eabi-size   MDP\ Group\ 19.elf 
+arm-none-eabi-objdump -h -S  MDP\ Group\ 19.elf  > "MDP Group 19.list"
+   text	   data	    bss	    dec	    hex	filename
+  61756	    548	  22176	  84480	  14a00	MDP Group 19.elf
+Finished building: default.size.stdout
+ 
+Finished building: MDP Group 19.list
+ 
+16:33:11 **** Incremental Build of configuration Debug for project MDP Group 19 ****
+make -j16 all 
+arm-none-eabi-size   MDP\ Group\ 19.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61756	    548	  22176	  84480	  14a00	MDP Group 19.elf
+Finished building: default.size.stdout
+ 

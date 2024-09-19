@@ -1,0 +1,10 @@
+16:33:11 **** Incremental Build of configuration Debug for project MDP Group 19 ****
+make -j16 all 
+arm-none-eabi-size   MDP\ Group\ 19.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61756	    548	  22176	  84480	  14a00	MDP Group 19.elf
+Finished building: default.size.stdout
+ 
+
+16:33:12 Build Finished. 0 errors, 0 warnings. (took 410ms)
+
