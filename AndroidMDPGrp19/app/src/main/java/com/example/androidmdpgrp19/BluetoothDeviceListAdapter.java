@@ -28,14 +28,21 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
         BluetoothDevice device = bluetoothDevices.get(position);
 
         if (device != null) {
-            TextView deviceName = (TextView) convertView.findViewById(R.id.btDeviceName);
-            TextView deviceAdress = (TextView) convertView.findViewById(R.id.btDeviceAddress);
+            TextView deviceNameTextView = (TextView) convertView.findViewById(R.id.btDeviceName);
+            TextView deviceAddressTextView = (TextView) convertView.findViewById(R.id.btDeviceAddress);
 
-            if (deviceName != null) {
-                deviceName.setText(device.getName());
+            String deviceName = device.getName();
+            String deviceMAC = device.getAddress();
+
+            if (deviceName == null || deviceName.isEmpty()) {
+                deviceName = "Unnamed Device";
             }
-            if (deviceAdress != null) {
-                deviceAdress.setText(device.getAddress());
+
+            if (deviceNameTextView != null) {
+                deviceNameTextView.setText(deviceName);
+            }
+            if (deviceAddressTextView != null) {
+                deviceAddressTextView.setText(deviceMAC);
             }
         }
 

@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private final String[] TAB_TITLE = new String[]{
-            "Home",
+            //can remove
+            "Main",
             "Bluetooth"
     };
 

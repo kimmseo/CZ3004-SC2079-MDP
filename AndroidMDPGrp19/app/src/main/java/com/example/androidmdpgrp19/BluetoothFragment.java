@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -63,10 +65,11 @@ public class BluetoothFragment extends Fragment {
     TextView btMessagesTextView;
     EditText inputMsgEditText;
     Button sendButton;
+    Button manualButton;
+    Button pathButton;
 
     private String TAG = "Bluetooth Fragment";
 
-    //new
     public ArrayList<BluetoothDevice> availDevicesArrList = new ArrayList<>();
     public ArrayList<BluetoothDevice> pairedDevicesArrList = new ArrayList<>();
     public BluetoothDeviceListAdapter availDeviceListAdapter;
@@ -78,6 +81,9 @@ public class BluetoothFragment extends Fragment {
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private ProgressDialog btDisconnectProgressDialog;
+    private boolean retryConnection = false;
+
+    Handler reconnectionHandler = new Handler();
 
     public BluetoothFragment() {
         isBluetoothOn = false;
@@ -96,7 +102,7 @@ public class BluetoothFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragView = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+        View fragView = inflater.inflate(R.layout.bluetooth_fragment_layout, container, false);
 
         pairedDeviceListView = fragView.findViewById(R.id.pairedDeviceList);
         availDeviceListView = fragView.findViewById(R.id.availDeviceList);
@@ -111,6 +117,10 @@ public class BluetoothFragment extends Fragment {
         btMessagesTextView = fragView.findViewById(R.id.btMessagesTextView);
         inputMsgEditText = fragView.findViewById(R.id.inputMsgEditText);
         sendButton = fragView.findViewById(R.id.sendBtn);
+
+        manualButton = fragView.findViewById(R.id.manual_mode_toggle);
+        pathButton = fragView.findViewById(R.id.path_mode_toggle);
+        //path is default enabled
 
         initBluetooth();
 
@@ -173,9 +183,9 @@ public class BluetoothFragment extends Fragment {
                 }
         );
 
-        //TODO make bt toggle
         btToggleButton.setOnClickListener(view -> {
-            onBluetooth(view);
+            //onBluetooth(view);
+            toggleBluetooth();
         });
 
         btFindDevicesButton.setOnClickListener(view -> {
@@ -203,6 +213,18 @@ public class BluetoothFragment extends Fragment {
             }
         });
 
+        manualButton.setOnClickListener(v -> {
+            manualButton.setEnabled(true);
+            pathButton.setEnabled(false);
+            sendIntent("updateRobocarMode", "manual");
+        });
+
+        pathButton.setOnClickListener(v -> {
+            pathButton.setEnabled(true);
+            manualButton.setEnabled(false);
+            sendIntent("updateRobocarMode", "path");
+        });
+
 
         // pops up when BT is disconnected
         this.btDisconnectProgressDialog = new ProgressDialog(getContext());
@@ -227,7 +249,10 @@ public class BluetoothFragment extends Fragment {
         getActivity().registerReceiver(discoverBroadcastReceiver, filter);
 
         //incoming message broadcast receiver
-        getActivity().registerReceiver(this.incomingMsgReceiver, new IntentFilter("incomingMessage"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(incomingMsgReceiver, new IntentFilter("incomingBTMessage"));
+
+        //send bt message receiver
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(sendBTMsgReceiver, new IntentFilter("sendBTMessage"));
 
     }
 
@@ -248,9 +273,12 @@ public class BluetoothFragment extends Fragment {
         if (bluetoothAdapter == null) {
             displayShortToast("Bluetooth is not supported on this device");
         }
+        if (bluetoothAdapter.isEnabled()) {
+            isBluetoothOn = true;
+        }
 
+        updateBTButtons();
         findPairedDevices();
-
     }
 
     private void findPairedDevices() {
@@ -280,6 +308,8 @@ public class BluetoothFragment extends Fragment {
 
     public void discoverDevices(View v) {
         checkLocationPermission();
+
+
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
         startActivity(discoverableIntent);
@@ -319,6 +349,33 @@ public class BluetoothFragment extends Fragment {
         bluetoothConnectionService.startClient(device, uuid);
     }
 
+    private void toggleBluetooth() {
+        //Toggle the status
+        isBluetoothOn = !isBluetoothOn;
+        if (isBluetoothOn) {
+            bluetoothAdapter.enable();
+        } else {
+            bluetoothAdapter.disable();
+        }
+        updateBTButtons();
+    }
+
+    private void updateBTButtons() {
+        if (isBluetoothOn) {
+            btToggleButton.setText("Bluetooth ON");
+            btToggleButton.setEnabled(true);
+            btFindDevicesButton.setEnabled(true);
+        } else {
+            btToggleButton.setText("Bluetooth OFF");
+            btToggleButton.setEnabled(false);
+            btFindDevicesButton.setEnabled(false);
+        }
+    }
+
+    private void disconnectBluetooth(){
+        bluetoothConnectionService.disconnect();
+    }
+
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver discoverBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -327,25 +384,34 @@ public class BluetoothFragment extends Fragment {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                availDevicesArrList.add(device);
+
+                //check if btDevice has been added yet
+                boolean isDeviceAlrAdded = false;
+                for (BluetoothDevice availDevice : availDevicesArrList) {
+                    // Objects.equals() for null-safe comparison and check device address
+                    if (Objects.equals(availDevice.getAddress(), device.getAddress())) {
+                        isDeviceAlrAdded = true;
+                        break;
+                    }
+                }
+
+                //device not added so add now
+                if(!isDeviceAlrAdded){
+                    availDevicesArrList.add(device);
+                }
+
+                //availDevicesArrList.add(device);
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     //request permissions
+                    checkBTPermissions();
                     return;
                 }
                 availDeviceListAdapter = new BluetoothDeviceListAdapter(getContext(), R.layout.btdevice, availDevicesArrList);
                 availDeviceListView.setAdapter(availDeviceListAdapter);
 
-                //TODO filter for duplicate devices, can check mBroadcastReceiver3 22
+                //TODO filter for duplicate devices, check if works
 
-//                String deviceName = device.getName();
-//                String deviceHardwareAddress = device.getAddress(); // MAC address
 //
-//                availDeviceList.add(deviceName);
-//                availDeviceListArrAdapter.notifyDataSetChanged();
-
-                //following not needed
-//                availDeviceListArrAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, availDeviceList);
-//                availDeviceListView.setAdapter(availDeviceListArrAdapter);
             }
         }
     };
@@ -368,12 +434,18 @@ public class BluetoothFragment extends Fragment {
                 btConnStatusTextView.setText("Connected");
                 btConnStatusTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                 btConnDeviceNameTextView.setText(btDeviceName);
+                retryConnection = false;
+
+                //update robot state
+
             } else if (btStatus.equals("disconnected")) {
                 displayShortToast("Disconnected from " + btDeviceName);
                 btConnStatusTextView.setText("Disconnected");
                 btConnStatusTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 btConnDeviceNameTextView.setText("Device");
                 btDisconnectProgressDialog.show();
+                retryConnection = true;
+                reconnectionHandler.postDelayed(reconnectionRunnable, 5000);
             }
         }
     };
@@ -382,7 +454,7 @@ public class BluetoothFragment extends Fragment {
     private final BroadcastReceiver incomingMsgReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String text = intent.getStringExtra("receivedMessage");
+            String text = intent.getStringExtra("msg");
             if (text != null) {
                 btMessagesTextView.append(text + "\n");
             } else {
@@ -391,6 +463,27 @@ public class BluetoothFragment extends Fragment {
         }
 
     };
+
+    //Send message over BT Receiver
+    private BroadcastReceiver sendBTMsgReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String msg = intent.getStringExtra("msg");
+            try{
+                byte[] msgInBytes = msg.getBytes(Charset.defaultCharset());
+                bluetoothConnectionService.write(msgInBytes);
+            }catch(Exception e){
+                Log.e(TAG,"An error occurred while sending bluetooth message");
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private void sendIntent(String intentAction, String content){
+        Intent sendingIntent = new Intent(intentAction);
+        sendingIntent.putExtra("msg", content);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(sendingIntent);
+    }
 
     private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -411,6 +504,22 @@ public class BluetoothFragment extends Fragment {
             });
 
 
+
+    Runnable reconnectionRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                if (BluetoothConnectionService.isConnected == false && retryConnection) {
+                    startBTConnection(myBTDevice, MY_UUID);
+                    displayShortToast("Reconnection Success");
+                }
+                reconnectionHandler.removeCallbacks(reconnectionRunnable);
+                retryConnection = false;
+            } catch (Exception e) {
+                displayShortToast("Failed to reconnect, trying in 5 second");
+            }
+        }
+    };
 
     private void displayShortToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();

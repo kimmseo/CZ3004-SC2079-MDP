@@ -13,31 +13,35 @@ import android.widget.Toast;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class BluetoothConnectionService {
-    public static final String TAG = "BtConnectionSvc";
+    public static final String TAG = "BTConnectionService";
     private static final String appName = "MDP19Android";
-    private static final UUID MY_UUID_INSECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothAdapter bluetoothAdapter;
-    Context context;
-    private AcceptThread insecureAcceptThread;
-    private ConnectThread connectThread;
-    private static ConnectedThread connectedThread;
-
     private BluetoothDevice bluetoothDevice;
     private UUID deviceUUID;
+    Context context;
+    private AcceptThread acceptThread;
+    private ConnectThread connectThread;
+    private static ConnectedThread connectedThread;
 
     private ProgressDialog progressDialog;
 
     public static boolean isConnected = false;
 
     public BluetoothConnectionService(Context context){
-        //context is Bluetooth page Context
+        //context is Bluetooth frag Context
         this.context = context;
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         start();
@@ -55,9 +59,9 @@ public class BluetoothConnectionService {
             BluetoothServerSocket temp = null;
 
             try{
-                temp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(appName, MY_UUID_INSECURE);
-                Log.d(TAG, temp.toString());
-                Log.d(TAG,"Setting up server using "+MY_UUID_INSECURE);
+                temp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(appName, MY_UUID);
+                LogMessage(temp.toString());
+                LogMessage("Setting up server using "+ MY_UUID);
             }catch (IOException e){
                 Log.e(TAG, "AcceptThread: IO Exception "+e.getMessage());
             }
@@ -65,14 +69,14 @@ public class BluetoothConnectionService {
         }
 
         public void run(){
-            Log.d(TAG, "AcceptThread: run");
+            LogMessage( "AcceptThread: run");
             BluetoothSocket socket = null;
             try{
-                Log.d(TAG, "run: RFCOM server socket start.....");
+                LogMessage( "run: RFCOM server socket start.....");
                 // Blocking call, returns on a successful connection or an exception only
-                Log.d(TAG, serverSocket.toString());
+                LogMessage(serverSocket.toString());
                 socket = serverSocket.accept();
-                Log.d(TAG, "run: RFCOM server socket accepted connection.");
+                LogMessage("run: RFCOM server socket accepted connection.");
             }catch (IOException e){
                 Log.e(TAG, "AcceptThread: IOException: " + e.getMessage() );
             }
@@ -85,7 +89,7 @@ public class BluetoothConnectionService {
         }
         //To close the serversocket
         public void cancel() {
-            Log.d(TAG, "cancel: Canceling AcceptThread.");
+            LogMessage("cancel: Canceling AcceptThread.");
             try {
                 serverSocket.close();
             } catch (IOException e) {
@@ -104,7 +108,7 @@ public class BluetoothConnectionService {
         private BluetoothSocket bluetoothSocket;
 
         public ConnectThread(BluetoothDevice device, UUID uuid) {
-            Log.d(TAG, "ConnectThread: start");
+            LogMessage("ConnectThread: start");
             bluetoothDevice = device;
             deviceUUID = uuid;
         }
@@ -116,7 +120,7 @@ public class BluetoothConnectionService {
             try {
                 //get bluetooth socket
                 tmp = bluetoothDevice.createRfcommSocketToServiceRecord(deviceUUID);
-                Log.i(TAG, deviceUUID.toString() + " | " + MY_UUID_INSECURE);
+                Log.i(TAG, deviceUUID.toString() + " | " + MY_UUID);
             } catch (IOException e) {
                 Log.e(TAG, "ConnectThread: Could not create InsecureRfcommSocket " + e.getMessage());
             }
@@ -129,23 +133,19 @@ public class BluetoothConnectionService {
             try {
                 //Is a blocking call, only returns on successful connection or an exception
                 bluetoothSocket.connect();
-                Log.d(TAG, "run: ConnectThread connected.");
+                LogMessage("run: ConnectThread connected.");
                 connected(bluetoothSocket, bluetoothDevice);
             } catch (IOException e) {
                 try {
                     bluetoothSocket.close();
-                    Log.d(TAG, "run: Closed Socket.");
+                    LogMessage("run: Closed Socket.");
                 } catch (IOException e1) {
                     e.printStackTrace();
                     Log.e(TAG, "mConnectThread: run: Unable to close connection in socket " + e1.getMessage());
                 }
-                Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID_INSECURE );
+                LogMessage("run: ConnectThread: Could not connect to UUID: " + MY_UUID);
 
                 try {
-                    //link to bluetooth page TODO
-                    /*BluetoothPopUp mBluetoothPopUpActivity = (BluetoothPopUp) mContext;
-                    mBluetoothPopUpActivity.runOnUiThread(() -> Toast.makeText(mContext,
-                            "Failed to connect to the Device.", Toast.LENGTH_SHORT).show());*/
                     MainActivity mainActivity = (MainActivity) context;
                     mainActivity.runOnUiThread(() -> Toast.makeText(context,
                             "Failed to connect to the Device.", Toast.LENGTH_SHORT).show());
@@ -164,10 +164,10 @@ public class BluetoothConnectionService {
         }
         public void cancel() {
             try {
-                Log.d(TAG, "cancel: Closing Client Socket.");
+                LogMessage("cancel: Closing Client Socket.");
                 bluetoothSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "cancel: close() of mmSocket in Connectthread failed. " + e.getMessage());
+                Log.e(TAG, "cancel: close() of Socket in Connectthread failed. " + e.getMessage());
             }
         }
     }
@@ -177,22 +177,22 @@ public class BluetoothConnectionService {
      * session in listening (server) mode. Called by the Activity onResume()
      */
     public synchronized void start() {
-        Log.d(TAG, "start");
+        LogMessage("start");
 
         // Cancel any thread attempting to make a connection
         if (connectThread != null) {
             connectThread.cancel();
             connectThread = null;
         }
-        if (insecureAcceptThread == null) {
-            insecureAcceptThread = new AcceptThread();
-            insecureAcceptThread.start();
+        if (acceptThread == null) {
+            acceptThread = new AcceptThread();
+            acceptThread.start();
         }
         //Accept Thread starts and waits for a connection
     }
 
     public void startClient(BluetoothDevice device, UUID uuid){
-        Log.d(TAG, "startClient: Started.");
+        LogMessage("startClient: Started.");
 
         try {
             this.progressDialog = ProgressDialog.show(this.context, "Connecting Bluetooth", "Please Wait...", true);
@@ -210,28 +210,28 @@ public class BluetoothConnectionService {
         private final OutputStream btOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            Log.d(TAG, "ConnectedThread: Starting.");
+            LogMessage("ConnectedThread: Starting.");
 
             bluetoothSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
             try {
-                Log.d(TAG, "GETTING INPUT STREAM");
+                LogMessage("GETTING INPUT STREAM");
                 tmpIn = bluetoothSocket.getInputStream();
-                Log.d(TAG, "GETTING OUTPUT STREAM");
+                LogMessage("GETTING OUTPUT STREAM");
                 tmpOut = bluetoothSocket.getOutputStream();
-
-                //send intent to update Connection Status
-                Intent connStatus = new Intent("ConnectionStatus");
-                connStatus.putExtra("Status", "connected");
-                connStatus.putExtra("Device", bluetoothDevice);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(connStatus);
-                isConnected = true;
-                Log.d(TAG, "CONNECTED: " + isConnected);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            //send intent to update Connection Status
+            Intent connStatus = new Intent("ConnectionStatus");
+            connStatus.putExtra("Status", "connected");
+            connStatus.putExtra("Device", bluetoothDevice);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(connStatus);
+            isConnected = true;
+            LogMessage("CONNECTED: " + isConnected);
 
             btInStream = tmpIn;
             btOutStream = tmpOut;
@@ -241,31 +241,17 @@ public class BluetoothConnectionService {
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
             int bytes; // bytes returned from read()
-            StringBuilder msgBuffer = new StringBuilder();
 
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 // Read from the InputStream
                 try {
                     bytes = btInStream.read(buffer);
-                    Log.d(TAG, "reading buffer");
+                    LogMessage("reading buffer");
                     String incomingMessage = new String(buffer, 0, bytes);
-                    Log.d(TAG, "InputStream: " + incomingMessage);
-                    msgBuffer.append(incomingMessage);
+                    LogMessage("InputStream: " + incomingMessage);
+                    incomingBTMessageHandler(incomingMessage);
 
-                    int delimiterIndex = msgBuffer.indexOf("\n");
-                    if (delimiterIndex != -1) {
-                        String[] messages = msgBuffer.toString().split("\n");
-                        for (String message : messages) {
-                            Intent incomingMessageIntent = new Intent("incomingMessage");
-                            incomingMessageIntent.putExtra("receivedMessage", message);
-
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(incomingMessageIntent);
-                        }
-
-                        // Reset the message buffer
-                        msgBuffer = new StringBuilder();
-                    }
                 } catch (IOException e) {
                     Intent connStatus = new Intent("ConnectionStatus");
                     connStatus.putExtra("Status", "disconnected");
@@ -280,15 +266,16 @@ public class BluetoothConnectionService {
                         Log.e(TAG, "write: Error closing socket. " + e1.getMessage());
                         break;
                     }
+                } catch (JSONException e){
+                    Log.e(TAG, "JSON Error in incoming BT Message Handling");
                 }
             }
         }
-        //TODO see how to make BT instant reconnect after disconnect
 
         //Call this from the main activity to send data to the remote device
         public void write(byte[] bytes) {
             String text = new String(bytes, Charset.defaultCharset());
-            Log.d(TAG, "write: Writing to outputstream: " + text);
+            LogMessage("write: Writing to outputstream: " + text);
             try {
                 btOutStream.write(bytes);
             } catch (IOException e) {
@@ -307,17 +294,17 @@ public class BluetoothConnectionService {
     }
 
     private void connected(BluetoothSocket socket, BluetoothDevice device) {
-        Log.d(TAG, "connected: Starting.");
+        LogMessage("connected: Starting.");
 
         // Stop AcceptThread cos only want to connect to 1 device
-        if (insecureAcceptThread != null) {
-            insecureAcceptThread.cancel();
-            insecureAcceptThread = null;
+        if (acceptThread != null) {
+            acceptThread.cancel();
+            acceptThread = null;
         }
 
         // Start the thread to manage the connection and perform transmissions
         connectedThread = new ConnectedThread(socket);
-        Log.d(TAG, "BLUETOOTH SOCKET CONNECTED:" + socket.isConnected());
+        LogMessage("BLUETOOTH SOCKET CONNECTED:" + socket.isConnected());
         connectedThread.start();
     }
 
@@ -333,6 +320,159 @@ public class BluetoothConnectionService {
         // Synchronize a copy of the ConnectedThread
         Log.d(TAG, "write: Write called to " + connectedThread.toString());
         connectedThread.write(out);
+    }
+
+    private void incomingBTMessageHandler(String message) throws JSONException {
+        Log.i(TAG, "incomingBTMessageHandler: New incoming message: " + message);
+
+        //for checklist remove after
+//        String tempMsg = message.substring(0,message.length());
+//        String formattedInstruction = tempMsg.replaceAll("\\s", "");
+//        List<String> instructionList = Arrays.asList(formattedInstruction.split(","));
+//        String prefix = instructionList.get(0);
+//        prefix = prefix.toUpperCase();
+//        if (prefix.equals("TARGET")) {
+//            message = String.format("{\"cat\": \"image-rec\", \"value\": {\"obstacle_id\": \"%s\", \"image_id\": \"%s\"}}", instructionList.get(1), instructionList.get(2));
+//        } else if (prefix.equals("ROBOT")) {
+//            String directionStr = "";
+//            if(instructionList.get(3).equals("N")){
+//                directionStr = "0";
+//            } else if (instructionList.get(3).equals("E")) {
+//                directionStr = "2";
+//            }else if (instructionList.get(3).equals("S")) {
+//                directionStr = "4";
+//            }else if (instructionList.get(3).equals("W")) {
+//                directionStr = "6";
+//            }
+//
+//            message = String.format("{\"cat\": \"location\", \"value\": {\"x\": \"%s\", \"y\":\"%s\", \"d\":\"%s\"}}", instructionList.get(1), instructionList.get(2), directionStr);
+//        }
+
+        //end remove
+        try{
+
+            JSONObject messageJSON = new JSONObject(message);
+            String msgType = messageJSON.getString("cat");
+            switch(msgType.toUpperCase()){
+                case "INFO":
+                    //updates robot status textview
+                    //e.g {"cat":"info","value":"Ready to start"}
+                    String infoStr = messageJSON.getString("value");
+                    sendMsgIntent("updateRobocarStatus", infoStr);
+                    return;
+                case "IMAGE-REC":
+                    //updates obstacle image text
+                    //e.g {"cat": "image-rec", "value": {"obstacle_id": "1", "image_id": "11"}}
+                    JSONObject imageRecObj = messageJSON.getJSONObject("value");
+                    sendMsgIntent("imageResult", imageRecObj.toString());
+                    return;
+                case "LOCATION":
+                    //updates robot location
+                    //e.g {"cat": "location", "value": {"x": "3", "y":"4", "d":"0"}}
+                    //d0: up, 2:right, 4:down, 6:left
+                    JSONObject locationObj = messageJSON.getJSONObject("value");
+                    sendMsgIntent("updateRobocarLocation", locationObj.toString());
+                    return;
+                case "MODE":
+                    String mode = messageJSON.getString("value");
+                    sendMsgIntent("updateRobocarMode", mode);
+                    return;
+                case "STATUS":
+                    String status = messageJSON.getString("value");
+                    sendMsgIntent("updateRobocarState", status);
+                default:
+                    String messageReceived = messageJSON.getString("value");
+                    sendMsgIntent("incomingBTMessage", messageReceived);
+            }
+        }catch (Exception e){
+            //Means its NOT a JSON Obj
+            sendMsgIntent("incomingBTMessage", message);
+        }
+        plainTextCommandHandler(message);
+    }
+
+    private void plainTextCommandHandler(String commandText){
+
+        //NOT a JSON Object, so assume its basic text command responses
+        try{
+            if(commandText.contains("TARGET")){
+                // Submitting target ID (imageResult)
+                // TARGET, <Obstacle Number>, <Target ID>
+                String[] commandComponents = commandText.split(",");
+                if(commandComponents.length < 3){
+                    Log.e(TAG, "incomingBTMessageHandler: The TARGET plain text command has insufficient parts, command: " + commandText);
+                    return;
+                }
+                JSONObject imageRecResultObj = new JSONObject();
+                imageRecResultObj.put("obstacle_id", commandComponents[1]);
+                imageRecResultObj.put("image_id", commandComponents[2]);
+                sendMsgIntent("imageResult", imageRecResultObj.toString());
+                return;
+            }
+            if(commandText.contains("ROBOT")){
+                //Submitting robot position update
+                //ROBOT, <x>, <y>, <direction>
+                String[] commandComponents = commandText.split(",");
+                if(commandComponents.length < 4){
+                    Log.e(TAG, "incomingBTMessageHandler: The ROBOT plain text command has insufficient parts, command: "+commandText);
+                    return;
+                }
+                int xPos = Integer.parseInt(commandComponents[1]);
+                int yPos = Integer.parseInt(commandComponents[2]);
+                int dir = -1;
+                switch(commandComponents[3].trim().toUpperCase()){
+                    case "N":
+                        dir = 0;
+                        break;
+                    case "E":
+                        dir = 2;
+                        break;
+                    case "S":
+                        dir = 4;
+                        break;
+                    case "W":
+                        dir = 6;
+                        break;
+                }
+
+                JSONObject positionJson = new JSONObject();
+                positionJson.put("x", ++xPos);
+                positionJson.put("y", ++yPos);
+                positionJson.put("d", dir);
+                sendMsgIntent("updateRobocarLocation", positionJson.toString());
+            }
+            Log.i(TAG, "plainTextCommandHandler: Unknown Command: "+commandText);
+        }catch (Exception e){
+            Log.e(TAG, "incomingBTMessageHandler: An error occurred while trying to handle plain text cmd");
+            e.printStackTrace();
+        }
+    }
+
+    private void sendMsgIntent(String intentAction, String content){
+        Intent sendingIntent = new Intent(intentAction);
+        sendingIntent.putExtra("msg", content);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(sendingIntent);
+    }
+
+    private void LogMessage(String message) {
+        Log.d(TAG, message);
+    }
+
+    public synchronized void disconnect(){
+        if(connectedThread != null){
+            connectedThread.cancel();
+            connectedThread = null;
+        }
+        if(connectThread != null){
+            connectThread.cancel();
+            connectThread = null;
+        }
+        if(acceptThread != null){
+            acceptThread.cancel();
+            acceptThread = null;
+        }
+
+        isConnected = false;
     }
 
 
