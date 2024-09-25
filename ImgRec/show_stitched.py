@@ -54,7 +54,7 @@ def showAnnotatedStitched():
 
     plt.show()
 
-def generate_filename_with_timestamp(prefix="stitched_image.jpg", extension=".jpg"):
+def generate_filename_with_timestamp(prefix="stitched_image", extension=".jpg"):
     # Get the current date and time
     now = datetime.now()
     # Format the date and time as a string
@@ -62,3 +62,7 @@ def generate_filename_with_timestamp(prefix="stitched_image.jpg", extension=".jp
     # Combine prefix, timestamp, and extension to form the filename
     filename = f"{prefix}_{timestamp}{extension}"
     return filename
+
+if __name__ == "__main__":
+    # Example usage
+    showAnnotatedStitched()
