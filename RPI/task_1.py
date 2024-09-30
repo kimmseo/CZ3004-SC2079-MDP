@@ -84,6 +84,9 @@ def STMSendServer(STM, stm_start_event, stm32_send_queue, stm_rcv_event, shutdow
 
             stm_rcv_event.set() # now we can get messages from STM
 
+            #prevent code from running again until shutdown
+            shutdown_event.wait()
+
         #OPTIONAL, wait for ACK that all commands were received
             
     finally:
@@ -117,9 +120,9 @@ def STMRcvServer(STM, stm32_recv_queue, ir_queue, ir_start_event, stm_rcv_event,
                     run_complete_event.set() # set this event to send results to bluetooth
                     break
 
-                elif (time.time()-start_time>timeout):
-                    print("Timeout waiting for R receive message")
-                    break               
+                # elif (time.time()-start_time>timeout):
+                #     print("Timeout waiting for message")
+                #     break               
 
 
 def BTSendServer(BT, shutdown_event, bt_send_event, bt_send_queue):
@@ -129,7 +132,7 @@ def BTSendServer(BT, shutdown_event, bt_send_event, bt_send_queue):
             print("Getting results")
             results = bt_send_queue.get()# the whole result will be in some queue 
 
-            #Serialize JSON to string
+            #Serialize JSON to string before sending
             result_str = json.dumps(results)
 
             print("Sending results to Android")
@@ -138,6 +141,7 @@ def BTSendServer(BT, shutdown_event, bt_send_event, bt_send_queue):
             
             print("The run is over.")
             shutdown_event.set() # the run is over
+
     finally:
         print("Disconnecting Bluetooth")
         BT.bluetooth_disconnect()
@@ -146,9 +150,34 @@ def BTSendServer(BT, shutdown_event, bt_send_event, bt_send_queue):
 def BTRcvServer(shutdown_event, BT, bt_recv_queue, pc_send_event):
     while not shutdown_event.is_set():
         print("Waiting to receive Layout from Android")
+
+        #received is the string
         layout = BT.android_receive()
-        bt_recv_queue.put(layout) # put layout into
-        pc_send_event.set() # start the event in PCRcvServer
+
+        #deserialize string back into python object {NOT NECESSARY}
+        layout_json = json.loads(layout)
+
+        print("Received Data:")
+        print(layout_json)
+
+        print("Is this Data correct?")
+        print("1 -- Yes")
+        print("2 -- No")
+        choice = input()
+
+        if choice == '1':
+            bt_recv_queue.put(layout_json) # put layout into
+            pc_send_event.set() # start the event in PCRcvServer
+            
+            #prevent code from running again until shutdown
+            shutdown_event.wait()
+        
+        else: # as long as input is anything other than 1, we get new data
+            print("Getting new Data ...")
+            continue
+
+
+
 
     
 def PCSendServer(PC, shutdown_event, pc_send_event, bt_recv_queue, pc_recv_event):
@@ -156,9 +185,16 @@ def PCSendServer(PC, shutdown_event, pc_send_event, bt_recv_queue, pc_recv_event
         while not shutdown_event.is_set():
             pc_send_event.wait()
             sending_layout = bt_recv_queue.get()
+
+            #need to change the python object back into a string before sending
+            sending_layout_string = json.dumps(sending_layout)
+
             print("Sending Layout to Algorithm")
-            PC.PC_send(sending_layout)
+            PC.PC_send(sending_layout_string) # we send the serialized json
             pc_recv_event.set()
+
+            #prevent the code from running again until shutdown
+            shutdown_event.wait()
     
     finally:
         print("Disconnecting PC")
@@ -173,6 +209,9 @@ def PCRcvServer(shutdown_event, pc_recv_event, PC, stm32_send_queue, stm_start_e
         stm32_send_queue.put(commands) # put the commands inside of stm32 send queue
         
         stm_start_event.set() # start the sending of commands to STM
+
+        #prevent code from running again until shutdown
+        shutdown_event.wait()
 
 
 if __name__ == "__main__":
