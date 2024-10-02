@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="5"
+    tools:context=".MainFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <view
+                android:id="@+id/mapView"
+                class="com.example.androidmdpgrp19.GridMap"
+                android:layout_width="500dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                 />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/robotStatusTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="Robot Status:"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/robotStatusText"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:padding="4dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:background="@drawable/rounded_corner_bg"
+                        android:scrollbars="vertical"
+                        android:text="Not Available"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_timeTaken"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Time Taken: Exploration not started"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:id="@+id/obstacleListTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="Obstacles"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/add_obs_x_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="X: "
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/add_obs_x_value"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-2dp"
+                        android:layout_marginBottom="-6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/teal_200"
+                        android:hint="x"
+                        android:inputType="number"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/add_obs_y_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Y: "
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/add_obs_y_value"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:backgroundTint="@color/teal_200"
+                        android:textSize="15sp"
+                        android:hint="y"
+                        android:layout_marginTop="-2dp"
+                        android:layout_marginBottom="-6dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <Button
+                        android:id="@+id/btnSendInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_weight="2"
+                        android:padding="1dp"
+                        android:text="Send Arena"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        android:textColor="@color/teal_200"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        app:strokeColor="@color/teal_200"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp" />
+
+                    <Button
+                        android:id="@+id/add_obs_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="5dp"
+                        android:padding="1dp"
+                        android:text="Add Obstacle"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        android:textColor="@color/teal_200"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        app:strokeColor="@color/teal_200"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp" />
+
+                    <Button
+                        android:id="@+id/stop_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="5dp"
+                        android:padding="1dp"
+                        android:text="Stop"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        android:textColor="@color/teal_200"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        app:strokeColor="@color/teal_200"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/home_obstacles_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scrollbars="vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/manualControlTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Robot Controls"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:columnCount="3"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/temp_btnFW10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FW10" />
+
+                    <Button
+                        android:id="@+id/temp_btnBW10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BW10" />
+
+                    <Button
+                        android:id="@+id/temp_btnFL00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FL00" />
+
+                    <Button
+                        android:id="@+id/temp_btnFR00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FR00" />
+
+                    <Button
+                        android:id="@+id/temp_btnBL00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BL00" />
+
+                    <Button
+                        android:id="@+id/temp_btnBR00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BR00" />
+                </GridLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:paddingTop="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="379dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageButton
+                            android:id="@+id/upArrowBtn"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/baseline_arrow_upward_24"
+                            android:background="@drawable/android_round_btn" />
+
+                        <ImageButton
+                            android:id="@+id/leftArrowBtn"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/upArrowBtn"
+                            android:src="@drawable/baseline_arrow_left_24"
+                            android:background="@drawable/android_round_btn" />
+
+                        <ImageButton
+                            android:id="@+id/rightArrowBtn"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/upArrowBtn"
+                            android:src="@drawable/baseline_arrow_right_24"
+                            android:background="@drawable/android_round_btn" />
+
+                        <ImageButton
+                            android:id="@+id/downArrowBtn"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/baseline_arrow_down_24"
+                            android:background="@drawable/android_round_btn" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/robot_x_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:text="X:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/robot_y_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:text="Y:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/robotDirText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/robotStatusText"
+                            android:layout_gravity="left"
+                            android:layout_marginBottom="20dp"
+                            android:layout_weight="1"
+                            android:text="Facing:"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btnFastestCar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentLeft="true"
+                        android:padding="1dp"
+                        android:text="Fastest Car"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        app:icon="@drawable/baseline_access_time_filled_24"
+                        android:textColor="@color/textcolor_states_materialbtn"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/textcolor_states_materialbtn"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp"
+                        app:iconTint="@color/textcolor_states_materialbtn" />
+
+                    <Button
+                        android:id="@+id/btnImageRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentRight="true"
+                        android:padding="1dp"
+                        android:text="Image Rec"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        app:icon="@drawable/baseline_camera_24"
+                        android:textColor="@color/textcolor_states_materialbtn"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/textcolor_states_materialbtn"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp"
+                        app:iconTint="@color/textcolor_states_materialbtn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btnResetArena"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentLeft="true"
+                        android:padding="1dp"
+                        android:text="Reset Arena"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        app:icon="@drawable/baseline_refresh_arena_24"
+                        android:textColor="@color/textcolor_states_materialbtn"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/textcolor_states_materialbtn"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp"
+                        app:iconTint="@color/textcolor_states_materialbtn" />
+
+                    <Button
+                        android:id="@+id/btnSetObstacle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentRight="true"
+                        android:padding="1dp"
+                        android:text="Set Obstacle"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        app:icon="@drawable/baseline_set_obstacle_24"
+                        android:textColor="@color/textcolor_states_materialbtn"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/textcolor_states_materialbtn"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp"
+                        app:iconTint="@color/textcolor_states_materialbtn"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btnDirectionFacing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentLeft="true"
+                        android:padding="1dp"
+                        android:text="Set Facing"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        app:icon="@drawable/baseline_set_obstacle_direction_24"
+                        android:textColor="@color/textcolor_states_materialbtn"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/textcolor_states_materialbtn"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp"
+                        app:iconTint="@color/textcolor_states_materialbtn"/>
+
+                    <Button
+                        android:id="@+id/btnPlaceRobot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentRight="true"
+                        android:padding="1dp"
+                        android:text="Place Robot"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        app:icon="@drawable/baseline_place_robot_24"
+                        android:textColor="@color/textcolor_states_materialbtn"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/textcolor_states_materialbtn"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp"
+                        app:iconTint="@color/textcolor_states_materialbtn" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
