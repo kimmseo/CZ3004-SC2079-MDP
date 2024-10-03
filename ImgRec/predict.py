@@ -14,7 +14,7 @@ spec.loader.exec_module(PC_CONFIG)
 class Predictor:
     def __init__(self):
         # Load a pre-trained yolov8n model
-        self.model = YOLO("/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/weights/dogDSnewL_best.pt") # replace model here
+        self.model = YOLO("/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/weights/best_FullDS150E.pt") # replace model here
     #     self.print_class_ids()  # Print class IDs upon initialization
 
     # def print_class_ids(self):
@@ -99,11 +99,13 @@ class Predictor:
                 else:
                     print("Bullseye detected")
                     class_name = "bullseye"
+                    detection_id = i
             else:
                 # Determine the largest bounding box
                 box_width = boxes[i][2] - boxes[i][0]
                 box_height = boxes[i][3] - boxes[i][1]
                 size = max(box_width, box_height)
+                detection_id = i
 
                 if largest_size == -1 or size > largest_size:
                     largest_size = size
@@ -114,7 +116,10 @@ class Predictor:
             print("class_name = " + class_name)
             timestamp = int(time.time())
             # Save the annotated image
-            results[detection_id].save(f'/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/data/image-rec/annotated_images/{class_name}_{timestamp}.jpg')
+            try:
+                results[detection_id].save(f'/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/data/image-rec/annotated_images/{class_name}_{timestamp}.jpg')
+            except:
+                print("error in saving photo!")
         else:
             print("class_name = None")
 
@@ -171,4 +176,4 @@ if __name__ == "__main__":
     # Specify the path to your image
     image_file_path = os.path.join(PC_CONFIG.FILE_DIRECTORY, "image-rec", "sample_images", "IMG_9325.jpg")
     # Predict and display the class name
-    predictor.predict_id(image_file_path, "TASK_2")
+    predictor.predict_id(image_file_path, "TASK_1")

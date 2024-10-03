@@ -2,14 +2,34 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
+def get_camera_index():
+    index = 0
+    arr = []
+    while True:
+        cap = cv2.VideoCapture(index)
+        if not cap.read()[0]:
+            break
+        else:
+            arr.append(index)
+        cap.release()
+        index += 1
+    return arr
+
+# Get available cameras
+camera_indexes = get_camera_index()
+print(f"Available cameras: {camera_indexes}")
+
+# Try to use the last available camera (which is often an external or Continuity Camera)
+camera_index = camera_indexes[-1] if camera_indexes else 0
+
 # Initialize the webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(camera_index)
 
 # Initialize YOLOv8 model
-model = YOLO('/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/weights/newL_best.pt')  # Replace with the path to your model
+model = YOLO('/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/weights/best_task2.pt')  # Replace with the path to your model
 
 # Set the input size
-INPUT_SIZE = (640, 640)
+INPUT_SIZE = (720, 720)
 
 while True:
     # Read a frame from the webcam

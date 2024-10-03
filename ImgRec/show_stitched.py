@@ -6,6 +6,7 @@ import os
 import importlib.util
 import math
 from datetime import datetime
+import shutil
 
 config_dir = os.path.abspath(os.path.dirname(__file__))
 config_path = os.path.join(config_dir, 'PC_CONFIG.py')
@@ -52,7 +53,8 @@ def showAnnotatedStitched():
     manager = plt.get_current_fig_manager()
     manager.window.wm_geometry("+0+0")  # Move the window to position (0, 0)
 
-    plt.show()
+    # plt.show()
+    archive_directory_content(image_dir)
 
 def generate_filename_with_timestamp(prefix="stitched_image", extension=".jpg"):
     # Get the current date and time
@@ -62,6 +64,23 @@ def generate_filename_with_timestamp(prefix="stitched_image", extension=".jpg"):
     # Combine prefix, timestamp, and extension to form the filename
     filename = f"{prefix}_{timestamp}{extension}"
     return filename
+
+def archive_directory_content(directory_path):
+    # Moves files with the specified extension from the given directory to an archive directory,
+    # except for files named .gitkeep.
+
+    archive_dir= os.path.join(PC_CONFIG.FILE_DIRECTORY,"image-rec","annotated_archive")
+    file_extension=".jpg"
+    os.makedirs(archive_dir, exist_ok=True)  # Create the archive directory if it doesn't exist
+    
+    for filename in os.listdir(directory_path):
+        if filename.endswith(file_extension) and filename != ".gitkeep":
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            new_filename = f"{filename.rsplit('.', 1)[0]}_{timestamp}.{filename.rsplit('.', 1)[1]}"
+            src_path = os.path.join(directory_path, filename)
+            dest_path = os.path.join(archive_dir, new_filename)
+            shutil.move(src_path, dest_path)
+            print(f"Moved and renamed: {src_path} to {dest_path}")
 
 if __name__ == "__main__":
     # Example usage
