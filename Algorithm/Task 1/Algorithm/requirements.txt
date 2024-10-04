@@ -1,0 +1,5 @@
+Flask
+flask_cors
+numpy
+python_tsp
+Werkzeug

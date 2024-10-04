@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.simulator-container{ 
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  text-align: center;
+}
+.header{
+  background-color: #AED6F1;
+  font-weight: bold;
+  font-size: 150%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+.grid-container {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    flex: 1;
+    flex-direction: row;
+  }
+  
+  .controller-container{
+    /* background-color: antiquewhite; */
+    border: 3px solid #AED6F1;
+    width: 100%;
+    border-radius: 3%;
+    margin-left: 2%;
+    /* padding-top: 1%; */
+    /* padding-right: 1%;
+    padding-left: 2%; */
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1px; /* Adjust the gap between cells as needed */
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .cell {
+    width: 30px; /* Adjust the size as needed */
+    height: 30px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .active {
+    background-color: #3498db; /* Add your desired active cell color */
+    border-right: 3px solid red;
+  }
+  
+  .no-Border {
+    background-color: #3498db;
+  }
+  
+  .right-border {
+    background-color:  #3498db; 
+    border-right: 3px solid #E74C3C; /* Add your desired border color for right direction */
+  }
+  
+  .left-border {
+    background-color:  #3498db; 
+    border-left: 3px solid #E74C3C; /* Add your desired border color for left direction */
+  }
+  
+  .bottom-border {
+    background-color:  #3498db; 
+    border-bottom: 3px solid #E74C3C ; /* Add your desired border color for bottom direction */
+  }
+  
+  .top-border {
+    background-color:  #3498db; 
+    border-top: 3px solid #E74C3C ; /* Add your desired border color for top direction */
+  }
+
+  /* Existing CSS styles */
+
+  .directionBorder{
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+  /* robot controller */
+  /* robot controller subheader*/
+  .subHeader-Con{
+    background-color: #AED6F1;
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+    border-radius: 3% 3% 0% 0%;
+  }
+
+  /* robot settings subheader*/
+  .subHeader-Robot{
+    background-color: #AED6F1;
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-bottom: 1.5%;
+    width: 100%;
+  }
+
+  /* Obstacle subheader*/
+  .subHeader-Obstacle{
+    background-color: #AED6F1;
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-bottom: 1.5%;
+    width: 100%;
+  }
+  .setBtn{
+    background-color: #F8C471;
+    width: 80%;
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 2%;
+    padding: 1% 2% 1% 2%;
+  }
+
+  .setBtn:hover{
+    background-color: white;
+    border: 2px solid #F8C471;
+    color: #F8C471;
+  }
+  .resetBtn{
+    background-color: #EC7063;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1% 2% 1% 2%;
+    border-radius: 2%;
+  }
+
+  .resetBtn:hover{
+    background-color: #fff;
+    border: 2px solid #E74C3C;
+    color: #E74C3C;
+  }
+  /*UNUSED*/
+  .robotResetBtn{
+    background-color: antiquewhite;
+  }
+
+  .runBtn{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    background-color: #48C9B0 ;
+    width: 80%;
+    padding: 1% 2% 1% 2%;
+    border-radius: 2%;
+  }
+  .runBtn:hover{
+    background-color: #fff;
+    border: 2px solid #48C9B0;
+    color: #48C9B0;
+  }
+
+  /* Robot Area Settings*/
+  table{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  td{
+    padding: 10px;
+  }
+
+input{
+  border: 1px solid gray;
+  text-align: center;
+}
+
+select{
+  border: 1px solid grey;
+  width: 60%;
+  text-align: center;
+}
+
+flex{
+  display: flex;
+}
