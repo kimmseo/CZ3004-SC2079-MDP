@@ -59,7 +59,7 @@ def upload_file():
         # cv2.imshow("Uploaded Image", image)
         # cv2.waitKey(0)  # Wait until a key is pressed
         # cv2.destroyAllWindows()  # Close the window
-        
+
         # Process the file and predict
         class_id = process_file(file_path, direction, task_type)
         return jsonify({'message': 'File successfully uploaded', 'predicted_id': class_id}), 200
@@ -73,13 +73,19 @@ if __name__ == '__main__':
     # show_annotation_queue = Queue()
     # process = Process(target=start_annotation_process, args=(show_annotation_queue,))
     # process.start()
-    
+
     print()
     print(f"UPLOAD FOLDER: {UPLOAD_FOLDER}")
+    # Port 5000 if free
+    '''
     try:
         app.run(host=HOST, port=PORT, debug=False)
     except:
         print('Unable to Connect to PC_CONFIG Host and Port. Switching to 0.0.0.0:4000.')
         app.run(host='0.0.0.0', port=4000, debug=True)
-     
+    '''
+
+    # Run on Port 4000
+    app.run(host='0.0.0.0', port=4000, debug=True)
+
     #process.join()
