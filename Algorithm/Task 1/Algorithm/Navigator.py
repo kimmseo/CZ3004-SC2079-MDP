@@ -11,6 +11,7 @@ from Obstacle import Obstacle
 from Direction import Direction
 from python_tsp.exact import solve_tsp_dynamic_programming
 
+# Determines how many squares in X, Y direction robot moves when turning
 # X direction  is first number, Y direction is second number
 turn_wrt_big_turns = [[2 * Constants.TURN_RADIUS, 3 * Constants.TURN_RADIUS],
                   [2 * Constants.TURN_RADIUS, 3 * Constants.TURN_RADIUS]]

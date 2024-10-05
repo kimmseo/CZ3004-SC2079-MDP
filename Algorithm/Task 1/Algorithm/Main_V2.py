@@ -10,7 +10,8 @@ import importlib.util
 app = Flask(__name__)
 CORS(app)
 
-
+# This is a health checkpoint
+# Checks that Algorithm server is properly connected to RPi
 @app.route("/status", methods=["GET"])
 def status():
     return jsonify({"status": "OK"})
@@ -18,20 +19,31 @@ def status():
 
 @app.route("/navigate", methods=["POST"])
 def path_finding():
+
+    # Filter out content json file based on the format
     contentReceived = request.json
     try:
         content = contentReceived['value']
     except:
         content = contentReceived
+
+    # For debugging - check that content is correct (content = obstacles)
     print(content)
+
+    # size_x, size_y : Robot size
     size_x, size_y = 20, 20
+    # robot_x, robot_y : Robot starting position
+    # robot_direction : Robot's facing direction at the start
     robot_x, robot_y = 1, 1
     robot_direction = 0
+
     obstacles = content["obstacles"]
     print(obstacles)
 
+    # Initialise Navigator object
     navigator = Navigator(size_x, size_y, robot_x, robot_y, robot_direction)
 
+    # Add obstacle to Navigator
     for obstacle in obstacles:
         navigator.add_obstacle(
             obstacle["x"], obstacle["y"], obstacle["d"], obstacle["id"]
@@ -51,7 +63,9 @@ def path_finding():
     # Process each command individually and append the location the robot should be after executing that command to path_results
     i = 0
 
+    # Debugging
     print("Commands Length: {}".format(len(commands)))
+
     transformed_commands = []
 
     for command in commands:
@@ -78,6 +92,7 @@ def path_finding():
             path_results.append(optimal_path[i].get_dict())
 
     # Adding additional commands for turning
+    # Adjust/Remove FW, BW commands as needed for fine tuning
     for command in commands:
         if command.startswith("FL"):
             #transformed_commands.append("FW003")
@@ -95,6 +110,7 @@ def path_finding():
             #transformed_commands.append("BW002")
         else:
             transformed_commands.append(command)
+    # Debugging
     print(transformed_commands)
     return jsonify(
         {
@@ -107,7 +123,7 @@ def path_finding():
         }
     )
 
-
+# Algorithm server runs on Port 5000
 if __name__ == "__main__":
 
     try:
