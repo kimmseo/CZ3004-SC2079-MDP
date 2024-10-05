@@ -95,10 +95,10 @@ class CommandGenerator:
 
             # If previous state and current state are not the same direction, it means that there will be a turn command involved
             # Assume there are 4 turning command: FR, FL, BL, BR (the turn command will turn the robot 90 degrees)
-            # FR00 | FR30: Forward Right;
-            # FL00 | FL30: Forward Left;
-            # BR00 | BR30: Backward Right;
-            # BL00 | BL30: Backward Left;
+            # FR000 | FR030: Forward Right;
+            # FL000 | FL030: Forward Left;
+            # BR000 | BR030: Backward Right;
+            # BL000 | BL030: Backward Left;
 
             # Facing north previously
             if states[i - 1].direction == Direction.NORTH:
