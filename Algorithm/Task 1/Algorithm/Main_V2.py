@@ -1,5 +1,5 @@
 import time
-
+import math
 from CommandGenerator import CommandGenerator
 from Navigator import Navigator
 from flask import Flask, request, jsonify
@@ -95,19 +95,29 @@ def path_finding():
     # Adjust/Remove FW, BW commands as needed for fine tuning
     for command in commands:
         if command.startswith("FL"):
-            #transformed_commands.append("FW003")
-            transformed_commands.append("FL090")
+            #transformed_commands.append("BW002")
+            transformed_commands.append("FL088")
         elif command.startswith("FR"):
-            #transformed_commands.append("FW002")
-            transformed_commands.append("FR090")
+            #transformed_commands.append("BW002")
+            transformed_commands.append("FR088")
         elif command.startswith("BL"):
-            #transformed_commands.append("FW003")
-            transformed_commands.append("BL090")
+            #transformed_commands.append("BW002")
+            transformed_commands.append("BL088")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
-            #transformed_commands.append("FW003")
-            transformed_commands.append("BR090")
             #transformed_commands.append("BW002")
+            transformed_commands.append("BR088")
+            #transformed_commands.append("BW002")
+        elif command.startswith("FW") or command.startswith("BW"):
+            print(command)
+            transformed_distance = command[3:6]
+            transformed_distance = str(int(math.ceil(float(transformed_distance)*0.80)))
+            if len(transformed_distance) == 1:
+                command_to_append = command[:2] + "00" + transformed_distance
+            else:
+                command_to_append = command[:2] + "0" + transformed_distance
+            transformed_commands.append(command_to_append)
+            #transformed_commands.append(command)
         else:
             transformed_commands.append(command)
     # Debugging
