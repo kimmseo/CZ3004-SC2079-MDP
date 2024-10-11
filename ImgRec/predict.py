@@ -117,7 +117,7 @@ class Predictor:
             timestamp = int(time.time())
             # Save the annotated image
             try:
-                results[detection_id].save(f'/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/data/image-rec/annotated_images/{class_name}_{timestamp}.jpg')
+                results[detection_id].save(f'../data/image-rec/annotated_images/{class_name}_{timestamp}.jpg')
             except:
                 print("error in saving photo!")
         else:

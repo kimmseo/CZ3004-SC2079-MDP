@@ -113,10 +113,10 @@ def path_finding():
             transformed_commands.append("BR088")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
-        elif command.startswith("FW"): #or command.startswith("BW"):
+        elif command.startswith("FW") or command.startswith("BW"): #or command.startswith("BW"):
             #print(command)
             transformed_distance = command[3:6]
-            transformed_distance = str(int(math.ceil(float(transformed_distance)*0.90)))
+            transformed_distance = str(int(math.ceil(float(transformed_distance)*0.77)))
             if len(transformed_distance) == 1:
                 command_to_append = command[:2] + "00" + transformed_distance
             else:
