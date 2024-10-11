@@ -97,24 +97,26 @@ def path_finding():
     for command in commands:
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
-            transformed_commands.append("BW007")
-            transformed_commands.append("FL085")
+            transformed_commands.append("FW003")
+            transformed_commands.append("FL088")
+            transformed_commands.append("BW005")
         elif command.startswith("FR"):
-            transformed_commands.append("BW007")
-            transformed_commands.append("FR085")
+            transformed_commands.append("FW003")
+            transformed_commands.append("FR088")
+            transformed_commands.append("BW005")
         elif command.startswith("BL"):
-            #transformed_commands.append("BW002")
-            transformed_commands.append("BL085")
+            transformed_commands.append("FW005")
+            transformed_commands.append("BL088")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
-            #transformed_commands.append("BW002")
-            transformed_commands.append("BR087")
+            transformed_commands.append("FW005")
+            transformed_commands.append("BR088")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
         elif command.startswith("FW"): #or command.startswith("BW"):
             #print(command)
             transformed_distance = command[3:6]
-            transformed_distance = str(int(math.ceil(float(transformed_distance)*1.05)))
+            transformed_distance = str(int(math.ceil(float(transformed_distance)*0.90)))
             if len(transformed_distance) == 1:
                 command_to_append = command[:2] + "00" + transformed_distance
             else:
@@ -128,7 +130,7 @@ def path_finding():
                         diffCommand = command[:2] + "0" + diff
                     transformed_commands.append(command_to_append[:2] + "090")
                     transformed_commands.append(diffCommand)
-                else:
+                elif int(transformed_distance) > 180:
                     diff = str(int(command_to_append[3:6]) - 180)
                     if len(diff) == 1:
                         diffCommand = command[:2] + "00" + diff
@@ -137,8 +139,13 @@ def path_finding():
                     transformed_commands.append(command_to_append[:2] + "090")
                     transformed_commands.append(command_to_append[:2] + "090")
                     transformed_commands.append(diffCommand)
+                else:
+                    transformed_commands.append(command_to_append[:2] + "090")
+                    transformed_commands.append(command_to_append[:2] + "090")
             else:
                 transformed_commands.append(command_to_append)
+
+
         else:  # For SNAP and FIN
             transformed_commands.append(command)
     # Debugging
