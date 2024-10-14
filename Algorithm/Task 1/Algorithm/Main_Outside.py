@@ -98,19 +98,19 @@ def path_finding():
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
             transformed_commands.append("BW003")
-            transformed_commands.append("FL086")
+            transformed_commands.append("FL090")
             transformed_commands.append("BW005")
         elif command.startswith("FR"):
             transformed_commands.append("BW003")
-            transformed_commands.append("FR086")
+            transformed_commands.append("FR090")
             transformed_commands.append("BW005")
         elif command.startswith("BL"):
             transformed_commands.append("FW005")
-            transformed_commands.append("BL086")
+            transformed_commands.append("BL090")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
             transformed_commands.append("FW005")
-            transformed_commands.append("BR086")
+            transformed_commands.append("BR090")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
         elif command.startswith("FW") or command.startswith("BW"): #or command.startswith("BW"):
@@ -118,9 +118,9 @@ def path_finding():
             transformed_distance = command[3:6]
             # Adjust ratio for FW and BW commands differently
             if command.startswith("FW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*0.90)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.05)))
             elif command.startswith("BW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.10)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.15)))
             else:
                 continue
             if len(transformed_distance) == 1:
