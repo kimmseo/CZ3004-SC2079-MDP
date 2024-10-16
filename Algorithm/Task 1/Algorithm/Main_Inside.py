@@ -1,7 +1,7 @@
 import time
 import math
 from CommandGenerator import CommandGenerator
-from Navigator import Navigator
+from Navigator_Inside import Navigator
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
