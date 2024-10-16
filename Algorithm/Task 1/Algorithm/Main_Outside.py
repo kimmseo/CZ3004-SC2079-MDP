@@ -97,20 +97,20 @@ def path_finding():
     for command in commands:
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
-            transformed_commands.append("BW003")
-            transformed_commands.append("FL090")
+            transformed_commands.append("BW005")
+            transformed_commands.append("FL091")
             transformed_commands.append("BW005")
         elif command.startswith("FR"):
-            transformed_commands.append("BW003")
-            transformed_commands.append("FR090")
+            transformed_commands.append("BW005")
+            transformed_commands.append("FR091")
             transformed_commands.append("BW005")
         elif command.startswith("BL"):
             transformed_commands.append("FW005")
-            transformed_commands.append("BL090")
+            transformed_commands.append("BL091")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
             transformed_commands.append("FW005")
-            transformed_commands.append("BR090")
+            transformed_commands.append("BR091")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
         elif command.startswith("FW") or command.startswith("BW"): #or command.startswith("BW"):
