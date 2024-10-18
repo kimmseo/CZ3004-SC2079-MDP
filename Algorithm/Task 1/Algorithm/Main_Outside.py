@@ -118,9 +118,9 @@ def path_finding():
             transformed_distance = command[3:6]
             # Adjust ratio for FW and BW commands differently
             if command.startswith("FW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.05)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.10)))
             elif command.startswith("BW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.15)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.20)))
             else:
                 continue
             if len(transformed_distance) == 1:
