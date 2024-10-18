@@ -38,7 +38,23 @@ def path_finding():
     robot_direction = 0
 
     obstacles = content["obstacles"]
-    print(obstacles)
+    for obs in obstacles['obstacles']:
+        print('obs:',obs)
+        if obs['x']==19:
+            print('changing x to 18')
+            obs['x']=18
+        if obs['y']==19:
+            print('changing y to 18')
+            obs['y']=18
+        if obs['x']==0:
+            print('changing x to 1')
+            obs['x']=1
+        if obs['y']==0:
+            print('changing y to 1')
+            obs['y']=1
+        else:
+            continue
+    print("printing obstacles:",obstacles)
 
     # Initialise Navigator object
     navigator = Navigator(size_x, size_y, robot_x, robot_y, robot_direction)
@@ -98,19 +114,19 @@ def path_finding():
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
             transformed_commands.append("BW005")
-            transformed_commands.append("FL091")
+            transformed_commands.append("FL088")
             transformed_commands.append("BW005")
         elif command.startswith("FR"):
             transformed_commands.append("BW005")
-            transformed_commands.append("FR091")
+            transformed_commands.append("FR088")
             transformed_commands.append("BW005")
         elif command.startswith("BL"):
-            transformed_commands.append("FW005")
-            transformed_commands.append("BL091")
+            transformed_commands.append("FW003")
+            transformed_commands.append("BL088")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
-            transformed_commands.append("FW005")
-            transformed_commands.append("BR091")
+            transformed_commands.append("FW003")
+            transformed_commands.append("BR088")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
         elif command.startswith("FW") or command.startswith("BW"): #or command.startswith("BW"):
@@ -118,9 +134,9 @@ def path_finding():
             transformed_distance = command[3:6]
             # Adjust ratio for FW and BW commands differently
             if command.startswith("FW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.10)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*0.80)))
             elif command.startswith("BW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.20)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*0.95)))
             else:
                 continue
             if len(transformed_distance) == 1:
@@ -180,4 +196,4 @@ if __name__ == "__main__":
         app.run(host=PC_CONFIG.HOST, port=PC_CONFIG.ALGO_PORT, debug=True)
     except:
         print('Unable to Connect to PC_CONFIG Host and Port. Switching to 0.0.0.0:5000.')
-        app.run(host='0.0.0.0', port=5000, debug=True)
+        app.run(host='0.0.0.0', port=8000, debug=True)
