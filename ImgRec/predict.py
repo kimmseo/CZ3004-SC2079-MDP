@@ -10,11 +10,13 @@ config_path = os.path.join(config_dir, 'PC_CONFIG.py')
 spec = importlib.util.spec_from_file_location("PC_CONFIG", config_path)
 PC_CONFIG = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(PC_CONFIG)
+dir = str(os.path.join(PC_CONFIG.BASE_DIR, "weights", "best_task2.pt"))
 
 class Predictor:
     def __init__(self):
         # Load a pre-trained yolov8n model
-        self.model = YOLO("../weights/best_FullDS150E.pt") # replace model here
+        print("dir:",dir)
+        self.model = YOLO(dir) # replace model here
     #     self.print_class_ids()  # Print class IDs upon initialization
 
     # def print_class_ids(self):
@@ -38,10 +40,10 @@ class Predictor:
     #     class_name, largest_size, detection_id = None, -1, None
     #     for result in results:  # Assuming 'results' is a list
     #         print(f"task_type is {task_type}")
-
+            
     #         if task_type == "TASK_2":
     #             for prediction in result.predictions:
-    #                 print(prediction)
+    #                 print(prediction)                    
     #                 class_name = prediction.class_name
     #                 detection_id = prediction.detection_id
     #                 if class_name != "Bullseye":
@@ -68,7 +70,7 @@ class Predictor:
         if image is None:
             print(f"Error: Could not read image at {image_file_path}")
             return None, None, None
-
+        
         # Check the image size and resize if necessary
         if image.shape[0] != 640 or image.shape[1] != 640:
             image = cv2.resize(image, (640, 640))  # Resize to 640x640
@@ -80,7 +82,7 @@ class Predictor:
         print(results)
 
         # Show annotation (using YOLOv8's plotting capabilities)
-        # results[0].show()
+        # results[0].show()  
 
         # Extract class name, largest size, and detection ID
         class_name, largest_size, detection_id = None, -1, 0
@@ -117,7 +119,7 @@ class Predictor:
             timestamp = int(time.time())
             # Save the annotated image
             try:
-                results[detection_id].save(f'../data/image-rec/annotated_images/{class_name}_{timestamp}.jpg')
+                results[detection_id].save(f'/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/data/image-rec/annotated_images/{class_name}_{timestamp}.jpg')
             except:
                 print("error in saving photo!")
         else:
