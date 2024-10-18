@@ -13,8 +13,8 @@ from python_tsp.exact import solve_tsp_dynamic_programming
 
 # Determines how many squares in X, Y direction robot moves when turning
 # X direction  is first number, Y direction is second number
-turn_wrt_big_turns = [[3 * Constants.TURN_RADIUS, 1 * Constants.TURN_RADIUS],
-                  [3 * Constants.TURN_RADIUS, 1 * Constants.TURN_RADIUS]]
+turn_wrt_big_turns = [[1 * Constants.TURN_RADIUS, 3 * Constants.TURN_RADIUS],
+                  [1 * Constants.TURN_RADIUS, 3 * Constants.TURN_RADIUS]]
 
 class Navigator:
     def __init__(self, size_x : int, size_y : int, robot_x : int, robot_y : int, robot_direction : Direction, big_turn = None):

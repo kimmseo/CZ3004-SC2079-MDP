@@ -98,19 +98,19 @@ def path_finding():
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
             transformed_commands.append("BW003")
-            transformed_commands.append("FL088")
+            transformed_commands.append("FL086")
             transformed_commands.append("BW005")
         elif command.startswith("FR"):
             transformed_commands.append("BW003")
-            transformed_commands.append("FR088")
+            transformed_commands.append("FR086")
             transformed_commands.append("BW005")
         elif command.startswith("BL"):
             transformed_commands.append("FW005")
-            transformed_commands.append("BL088")
+            transformed_commands.append("BL086")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
             transformed_commands.append("FW005")
-            transformed_commands.append("BR088")
+            transformed_commands.append("BR086")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
         elif command.startswith("FW") or command.startswith("BW"): #or command.startswith("BW"):
@@ -118,7 +118,7 @@ def path_finding():
             transformed_distance = command[3:6]
             # Adjust ratio for FW and BW commands differently
             if command.startswith("FW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.00)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*0.90)))
             elif command.startswith("BW"):
                 transformed_distance = str(int(math.ceil(float(transformed_distance)*1.10)))
             else:
@@ -180,4 +180,4 @@ if __name__ == "__main__":
         app.run(host=PC_CONFIG.HOST, port=PC_CONFIG.ALGO_PORT, debug=True)
     except:
         print('Unable to Connect to PC_CONFIG Host and Port. Switching to 0.0.0.0:5000.')
-        app.run(host='0.0.0.0', port=8000, debug=True)
+        app.run(host='0.0.0.0', port=5000, debug=True)
