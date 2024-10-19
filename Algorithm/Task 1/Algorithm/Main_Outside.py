@@ -112,18 +112,18 @@ def path_finding():
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
             transformed_commands.append("BW003")
-            transformed_commands.append("FL090")
+            transformed_commands.append("FL087")
             transformed_commands.append("BW005")
         elif command.startswith("FR"):
             transformed_commands.append("BW005")
-            transformed_commands.append("FR090")
+            transformed_commands.append("FR087")
             transformed_commands.append("BW005")
         elif command.startswith("BL"):
             transformed_commands.append("FW003")
             transformed_commands.append("BL090")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
-            transformed_commands.append("FW003")
+            transformed_commands.append("FW002")
             transformed_commands.append("BR090")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
@@ -132,9 +132,9 @@ def path_finding():
             transformed_distance = command[3:6]
             # Adjust ratio for FW and BW commands differently
             if command.startswith("FW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.00)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.03)))
             elif command.startswith("BW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.00)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.1)))
             else:
                 continue
             if len(transformed_distance) == 1:
@@ -158,6 +158,8 @@ def path_finding():
                         diffCommand = command[:2] + "0" + diff
                     transformed_commands.append(command_to_append[:2] + "090")
                     transformed_commands.append(command_to_append[:2] + "090")
+                    if len(diffCommand)==4:
+                        diffCommand+="0"
                     transformed_commands.append(diffCommand)
                 else:
                     transformed_commands.append(command_to_append[:2] + "090")
@@ -194,4 +196,4 @@ if __name__ == "__main__":
         app.run(host=PC_CONFIG.HOST, port=PC_CONFIG.ALGO_PORT, debug=True)
     except:
         print('Unable to Connect to PC_CONFIG Host and Port. Switching to 0.0.0.0:5000.')
-        app.run(host='0.0.0.0', port=5000, debug=True)
+        app.run(host='0.0.0.0', port=8000, debug=True)

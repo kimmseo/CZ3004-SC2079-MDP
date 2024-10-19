@@ -39,18 +39,18 @@ def path_finding():
 
     obstacles = content["obstacles"]
     for obs in obstacles:
-        print('Obs:', obs)
+        #print('Obs:', obs)
         if obs['x']==19:
-            print("Changing x to 18")
+            #print("Changing x to 18")
             obs['x']=18
         if obs['y']==18:
-            print("Changing y to 18")
+            #print("Changing y to 18")
             obs['y']=18
         if obs['x']==0:
-            print("Changing x to 1")
+            #print("Changing x to 1")
             obs['x']=1
         if obs['y']==0:
-            print("Changing y to 1")
+            #print("Changing y to 1")
             obs['y']=1
     print("Printing obs: ", obstacles)
 
@@ -111,20 +111,20 @@ def path_finding():
     for command in commands:
         # Adjust turning angle (overshoot/undershoot)
         if command.startswith("FL"):
-            transformed_commands.append("BW003")
-            transformed_commands.append("FL089")
+            transformed_commands.append("BW009")
+            transformed_commands.append("FL087")
             transformed_commands.append("BW007")
         elif command.startswith("FR"):
-            transformed_commands.append("BW003")
-            transformed_commands.append("FR089")
+            transformed_commands.append("BW005")
+            transformed_commands.append("FR086")
             transformed_commands.append("BW007")
         elif command.startswith("BL"):
             transformed_commands.append("BW005")
-            transformed_commands.append("BL089")
+            transformed_commands.append("BL085")
             #transformed_commands.append("BW002")
         elif command.startswith("BR"):
             transformed_commands.append("BW005")
-            transformed_commands.append("BR089")
+            transformed_commands.append("BR088")
             #transformed_commands.append("BW002")
         # Fine tune FW and BW distance to match actual distance travelled by robot
         elif command.startswith("FW") or command.startswith("BW"): #or command.startswith("BW"):
@@ -132,9 +132,9 @@ def path_finding():
             transformed_distance = command[3:6]
             # Adjust ratio for FW and BW commands differently
             if command.startswith("FW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.05)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.065)))
             elif command.startswith("BW"):
-                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.05)))
+                transformed_distance = str(int(math.ceil(float(transformed_distance)*1.008)))
             else:
                 continue
             if len(transformed_distance) == 1:
