@@ -83,7 +83,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Time Taken: Exploration not started"
+                    android:text="Time Taken: Journey has not begun"
+                    style="@style/RegularTextView"
                     android:textSize="15sp"
                     android:textStyle="bold"/>
 
@@ -101,6 +102,7 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="Obstacles"
+                        style="@style/RegularTextView"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -120,7 +122,7 @@
                         android:layout_marginTop="-2dp"
                         android:layout_marginBottom="-6dp"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/teal_200"
+                        android:backgroundTint="@color/darkish_brown"
                         android:hint="x"
                         android:inputType="number"
                         android:textSize="15sp" />
@@ -131,6 +133,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:backgroundTint="@color/darkish_brown"
                         android:text="Y: "
                         android:textSize="15sp" />
 
@@ -140,7 +143,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:inputType="number"
-                        android:backgroundTint="@color/teal_200"
+                        android:backgroundTint="@color/darkish_brown"
                         android:textSize="15sp"
                         android:hint="y"
                         android:layout_marginTop="-2dp"
@@ -164,9 +167,8 @@
                         android:text="Send Arena"
                         android:textAlignment="center"
                         android:textSize="11sp"
-                        android:textColor="@color/teal_200"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        app:strokeColor="@color/teal_200"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/darkish_brown"
                         app:strokeWidth="1dp"
                         app:cornerRadius="10dp" />
 
@@ -181,9 +183,10 @@
                         android:text="Add Obstacle"
                         android:textAlignment="center"
                         android:textSize="11sp"
-                        android:textColor="@color/teal_200"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        app:strokeColor="@color/teal_200"
+
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/darkish_brown"
+
                         app:strokeWidth="1dp"
                         app:cornerRadius="10dp" />
 
@@ -198,9 +201,8 @@
                         android:text="Stop"
                         android:textAlignment="center"
                         android:textSize="11sp"
-                        android:textColor="@color/teal_200"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        app:strokeColor="@color/teal_200"
+                        style="@style/AppMaterialButton"
+                        app:strokeColor="@color/darkish_brown"
                         app:strokeWidth="1dp"
                         app:cornerRadius="10dp" />
 
@@ -209,7 +211,7 @@
                 <ListView
                     android:id="@+id/home_obstacles_listview"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="130dp"
                     android:scrollbars="vertical"/>
 
             </LinearLayout>
@@ -354,6 +356,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/robotStatusText"
                             android:layout_gravity="left"
+                            android:backgroundTint="@color/darkish_brown"
                             android:layout_marginBottom="20dp"
                             android:layout_weight="1"
                             android:text="Facing:"
@@ -383,7 +386,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_alignParentLeft="true"
                         android:padding="1dp"
-                        android:text="Fastest Car"
+                        android:text="Start 2"
                         android:textAlignment="center"
                         android:textSize="11sp"
                         app:icon="@drawable/baseline_access_time_filled_24"
@@ -402,7 +405,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_alignParentRight="true"
                         android:padding="1dp"
-                        android:text="Image Rec"
+                        android:text="Start 1"
                         android:textAlignment="center"
                         android:textSize="11sp"
                         app:icon="@drawable/baseline_camera_24"
@@ -474,7 +477,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_alignParentLeft="true"
                         android:padding="1dp"
-                        android:text="Set Facing"
+                        android:text="Set  Facing"
                         android:textAlignment="center"
                         android:textSize="11sp"
                         app:icon="@drawable/baseline_set_obstacle_direction_24"

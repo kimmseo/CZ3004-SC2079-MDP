@@ -1,11 +1,13 @@
 package com.example.androidmdpgrp19;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,7 +29,8 @@ import java.util.UUID;
 public class BluetoothConnectionService {
     public static final String TAG = "BTConnectionService";
     private static final String appName = "MDP19Android";
-    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    //UUID change
+    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FC");
     private final BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice bluetoothDevice;
     private UUID deviceUUID;
@@ -55,6 +58,7 @@ public class BluetoothConnectionService {
     private class AcceptThread extends Thread{
         //Local Server Socket
         private final BluetoothServerSocket serverSocket;
+        @SuppressLint("MissingPermission")
         public AcceptThread(){
             BluetoothServerSocket temp = null;
 
@@ -195,7 +199,16 @@ public class BluetoothConnectionService {
         LogMessage("startClient: Started.");
 
         try {
-            this.progressDialog = ProgressDialog.show(this.context, "Connecting Bluetooth", "Please Wait...", true);
+            this.progressDialog = new ProgressDialog(this.context);
+            this.progressDialog.setTitle("Connecting Bluetooth");
+            this.progressDialog.setMessage("Please wait...");
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.setButton(
+                    DialogInterface.BUTTON_NEGATIVE,
+                    "Cancel",
+                    (dialog, which) -> dialog.dismiss()
+            );
+            progressDialog.show();
         } catch (Exception e) {
             Log.e(TAG, "Error creating progressDialog " + e.getMessage());
         }
@@ -356,6 +369,7 @@ public class BluetoothConnectionService {
             switch(msgType.toUpperCase()){
                 case "INFO":
                     //updates robot status textview
+                    //for real time updates
                     //e.g {"cat":"info","value":"Ready to start"}
                     String infoStr = messageJSON.getString("value");
                     sendMsgIntent("updateRobocarStatus", infoStr);
@@ -368,16 +382,23 @@ public class BluetoothConnectionService {
                     return;
                 case "LOCATION":
                     //updates robot location
+                    //to see robot moving in real time
                     //e.g {"cat": "location", "value": {"x": "3", "y":"4", "d":"0"}}
                     //d0: up, 2:right, 4:down, 6:left
                     JSONObject locationObj = messageJSON.getJSONObject("value");
                     sendMsgIntent("updateRobocarLocation", locationObj.toString());
                     return;
                 case "MODE":
+                    //current unused todo remove
                     String mode = messageJSON.getString("value");
                     sendMsgIntent("updateRobocarMode", mode);
                     return;
                 case "STATUS":
+                    //status of robot
+                    //e.g when robot is finished, then will stop timer
+                    //if sent running then rest of buttons disabled
+                    //{"cat":"status", "value":"finished"}
+
                     String status = messageJSON.getString("value");
                     sendMsgIntent("updateRobocarState", status);
                 default:
@@ -386,10 +407,21 @@ public class BluetoothConnectionService {
             }
         }catch (Exception e){
             //Means its NOT a JSON Obj
-            sendMsgIntent("incomingBTMessage", message);
+            //if finish for task 2
+            //todo check if error
+            if (message.equals("FINISH/PATH")){
+                sendMsgIntent("updateRobocarState", "finished");
+            }
+            else {
+                //anything else
+                sendMsgIntent("incomingBTMessage", message);
+            }
+
         }
         plainTextCommandHandler(message);
     }
+
+    //not impt, mainly use json so plaintext can ignore todo remove
 
     private void plainTextCommandHandler(String commandText){
 

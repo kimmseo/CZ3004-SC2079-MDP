@@ -2,6 +2,12 @@
 <resources>
     <style name="AppMaterialButton"
         parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:backgroundTint">@color/color_states_materialbtn</item>
+        <item name="android:color">@color/darkish_brown</item>
+        <item name="android:strokeColor">@color/black</item>
+        <item name="android:fontFamily">@font/breathefire</item>
+    </style>
+    <style name="RegularTextView">
+        <item name="android:fontFamily">@font/breathefire</item>
+        <item name="android:textColor">@color/darkish_brown</item>
     </style>
 </resources>

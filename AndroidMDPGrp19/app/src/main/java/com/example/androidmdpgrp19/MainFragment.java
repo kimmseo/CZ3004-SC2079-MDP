@@ -282,6 +282,8 @@ public class MainFragment extends Fragment {
 
         // OnClickListeners for sending arena info to RPI
         btnStop.setOnClickListener(v->{
+            //send stop command
+            //broadcastSendBTIntent("egStop");
             sendStopCmdIntent("STOP");
         });
 
@@ -292,14 +294,19 @@ public class MainFragment extends Fragment {
         btnSendStartFastestCar.setOnClickListener(v->{
             txtTimeTaken.setText("Time Taken: Waiting for FINISHED");
             timeStarted = System.nanoTime();
-            sendControlCmdIntent("start");
+            //sendControlCmdIntent("start");
+            //send start command for task2
+            broadcastSendBTIntent("START/PATH");
+
         });
 
         btnSendStartImageRec.setOnClickListener(v->{
             gridMap.removeAllTargetIDs();
             txtTimeTaken.setText("Time Taken: Waiting for FINISHED");
-            sendControlCmdIntent("start");
+            //sendControlCmdIntent("start");
+            gridMap.sendUpdatedObstacleInformation();
             timeStarted = System.nanoTime();
+            //todo see json format to tell rpi to stop
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {

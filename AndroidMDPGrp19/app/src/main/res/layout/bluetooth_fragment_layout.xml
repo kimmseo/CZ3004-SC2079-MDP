@@ -82,6 +82,15 @@
             android:layout_marginBottom="7dp">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularTextView"
+                android:textSize="20dp"
+                android:text="Bluetooth Chat:">
+
+            </TextView>
+
+            <TextView
                 android:id="@+id/btMessagesTextView"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
@@ -115,6 +124,7 @@
                     android:layout_weight="2"
                     android:text="Send"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:strokeColor="@color/darkish_brown"
                     app:strokeWidth="1dp"
                     app:cornerRadius="10dp" />
 
@@ -167,13 +177,15 @@
                 android:id="@+id/pairedDeviceText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Paired Devices"
+                android:text="Paired   Devices"
+                style="@style/RegularTextView"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:textSize="20dp"/>
             <ListView
                 android:id="@+id/pairedDeviceList"
                 android:layout_width="match_parent"
+                style="@style/RegularTextView"
                 android:layout_height="40dp"
                 android:layout_weight="4"
                 android:layout_marginBottom="5dp" />
@@ -182,7 +194,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Available Devices"
+                android:text="Available   Devices"
+                style="@style/RegularTextView"
                 android:textStyle="bold"
                 android:textSize="20dp" />
             <ListView

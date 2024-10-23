@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.json.JSONArray;
@@ -93,12 +94,12 @@ public class GridMap extends View {
 
         gridLinePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         //TODO replace getColor with ContextCompat color
-        gridLinePaint.setColor(getResources().getColor(R.color.teal_700));
+        gridLinePaint.setColor(getResources().getColor(R.color.darkish_brown));
         //TODO borderPaint used? or not
         borderPaint.setColor(Color.WHITE);
         obstacleNumberPaint.setColor(Color.WHITE);
         //TODO FONT commented out
-        //obstaclePaint.setTypeface(ResourcesCompat.getFont(this.getContext(), R.font.anonymous_pro));
+        obstacleNumberPaint.setTypeface(ResourcesCompat.getFont(this.getContext(), R.font.enchantedland));
         obstacleBackgroundPaint.setColor(getResources().getColor(R.color.black));
         // FOR VIDEO: obstacleColor.setColor(Color.BLACK);
         robotColor.setColor(getResources().getColor(R.color.purple_200));
@@ -106,10 +107,10 @@ public class GridMap extends View {
         robotDirectionColour.setColor(getResources().getColor(R.color.red));
         endColor.setColor(Color.BLACK);
         startColor.setColor(getResources().getColor(R.color.purple_200));
-        unexploredColor.setColor(Color.LTGRAY);
-        gridNumTextPaint.setColor(getResources().getColor(R.color.teal_700));
+        unexploredColor.setColor(getResources().getColor(R.color.darker_old_yellow));
+        gridNumTextPaint.setColor(getResources().getColor(R.color.darkish_brown));
         //TODO FONT commented out
-        //gridNoText.setTypeface(ResourcesCompat.getFont(this.getContext(), R.font.anonymous_pro));
+        gridNumTextPaint.setTypeface(ResourcesCompat.getFont(this.getContext(), R.font.enchantedland));
         gridNumTextPaint.setTextSize(15);
         gridNumTextPaint.setFakeBoldText(true);
 
@@ -186,7 +187,7 @@ public class GridMap extends View {
                             targetPaint.setTextSize(20);
                         }
                         //colour of new image rec result text
-                        targetPaint.setColor(Color.YELLOW);
+                        targetPaint.setColor(Color.WHITE);
                         targetPaint.setTextAlign(Paint.Align.CENTER);
                         canvas.drawText(cell.targetID, (cell.startX + cell.endX) / 2, cell.endY + (cell.startY - cell.endY) / 4, targetPaint);
                     }
@@ -288,19 +289,19 @@ public class GridMap extends View {
 
         switch (robotDirection) {
             case UP:
-                car = BitmapFactory.decodeResource(getResources(), R.drawable.car_up);
+                car = BitmapFactory.decodeResource(getResources(), R.drawable.horse_cart_19_up);
                 canvas.drawBitmap(car, null, destCell, null);
                 break;
             case DOWN:
-                car = BitmapFactory.decodeResource(getResources(), R.drawable.car_down);
+                car = BitmapFactory.decodeResource(getResources(), R.drawable.horse_cart_19_down);
                 canvas.drawBitmap(car, null, destCell, null);
                 break;
             case RIGHT:
-                car = BitmapFactory.decodeResource(getResources(), R.drawable.car_right);
+                car = BitmapFactory.decodeResource(getResources(), R.drawable.horse_cart_19_right);
                 canvas.drawBitmap(car, null, destCell, null);
                 break;
             case LEFT:
-                car = BitmapFactory.decodeResource(getResources(), R.drawable.car_left);
+                car = BitmapFactory.decodeResource(getResources(), R.drawable.horse_cart_19_left);
                 canvas.drawBitmap(car, null, destCell, null);
                 break;
             default:
@@ -416,9 +417,10 @@ public class GridMap extends View {
         TextView yAxisTextView = ((Activity) this.getContext()).findViewById(R.id.robot_y_value);
         TextView directionAxisTextView = ((Activity) this.getContext()).findViewById(R.id.robotDirText);
 
-        String newDirText_x = "X: " + String.valueOf(col - 1);
+        //todo see if need to -1 for col or row or take out for robot coord shown
+        String newDirText_x = "X: " + String.valueOf(col);
 
-        String newDirText_y = "Y: " + String.valueOf(row - 1);
+        String newDirText_y = "Y: " + String.valueOf(row);
 
         xAxisTextView.setText(newDirText_x);
         yAxisTextView.setText(newDirText_y);
@@ -709,7 +711,7 @@ public class GridMap extends View {
         alertTitle.setPadding(20, 20, 20, 0);
         alertTitle.setTextSize(20);
         //TODO FONT commented out
-        //alertTitle.setTypeface(ResourcesCompat.getFont(this.getContext(), R.font.anonymous_pro));
+        //alertTitle.setTypeface(ResourcesCompat.getFont(this.getContext(), R.font.breathefire));
         alertTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
         alertTitle.setGravity(Gravity.CENTER);
         mBuilder.setCustomTitle(alertTitle);
@@ -856,8 +858,11 @@ public class GridMap extends View {
             valueObj.put("obstacles", obstaclesList);
 
             JSONObject msgJSON = new JSONObject();
-            msgJSON.put("cat", "obstacles");
+            //todo see if need old json format or move this json start to buttons
+            //msgJSON.put("cat", "obstacles");
+            msgJSON.put("type", "START/EXPLORE");
             msgJSON.put("value", valueObj);
+
 
             /* UNCOMMENT FOR INTEGRATION WITH RPI */
             Intent upDirectionIntent = new Intent("sendBTMessage");
