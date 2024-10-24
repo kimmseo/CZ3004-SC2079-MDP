@@ -1,5 +1,5 @@
 import requests
-import PC_CONFIG
+from config import PC_CONFIG
 
 class ImageRecognitionClient:
     def __init__(self, host, port):
