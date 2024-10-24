@@ -51,17 +51,21 @@ class STM32Server:
             self.send(command)
             print(f"Sent to STM: {command}")
             start_time = time.time()
-            timeout = 3
-            pattern = r"^(RT)\d{3}$"
+            timeout = 1000
+            pattern = r"^(RT)\d{5}$"
             while True:
                 received_msg = self.recv()
+                total_time = time.time()-start_time
                 if received_msg == "R":
                     print(f"Received 'R' from STM: {received_msg}")
                     break
-                elif (time.time()-start_time>timeout):
+                elif (total_time>timeout):
+                    print("Time:"+str(total_time))
+                    print("Timeout"+str(timeout))
                     print("Timeout waiting for R receive message")
                     break
             if re.match(pattern, command):
+                print("Pattern matched, sleeping for 0.1s")
                 time.sleep(0.1)
 
 
@@ -111,7 +115,9 @@ if __name__ == "__main__":
             "BR090",
             "BW002",
             "FW020"]
-    
+
+
+    commands = ["FW035","FR170","AF010"]
     start_time = time.time()
     STM.send_command_list(commands)
     end_time = time.time()
