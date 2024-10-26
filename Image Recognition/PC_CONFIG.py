@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Configuration for Flask
 HOST = '0.0.0.0'  # or '0.0.0.0' for external access
-IMAGE_REC_PORT = 5000  # Port number for your Flask app
+IMAGE_REC_PORT = 4000  # Port number for your Flask app
 
 # File directory paths
 FILE_DIRECTORY = os.path.join(BASE_DIR, 'data')  # Adjust according to your structure

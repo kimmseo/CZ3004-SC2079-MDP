@@ -182,7 +182,7 @@ def path_finding():
         }
     )
 
-# Algorithm server runs on Port 5000
+# Algorithm server runs on Port 8000
 if __name__ == "__main__":
 
     try:

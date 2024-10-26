@@ -6,11 +6,11 @@ HEADER = 64
 PORT = 2040
 
 # Change to your laptop host ip when connected to RPI Wifi
-# use ipconfig to find your laptop host ip 
-#HOST = '192.168.151.23' #Aaron Laptop (NTUSECURE)
-HOST = '192.168.16.22' #Aaron Laptop (MDPGrp16)
-#HOST = '192.168.16.11' #Cy Laptop (MDPGrp16)
-#HOST = '192.168.80.27'  #Cy Laptop (RPICy)
+# use ipconfig to find your laptop host ip
+#HOST = '192.168.151.23' # NTUSECURE
+HOST = '192.168.19.21'
+#HOST = '192.168.19.19'
+#HOST = '192.168.80.20'
 
 ADDR = (HOST, PORT)
 FORMAT = 'utf-8'
@@ -40,7 +40,7 @@ def handle_client(conn, addr):
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
             print(f"[{addr}] Received: {msg} \n")
-            
+
             # Prepare and send the main JSON response
             response = create_response()
             response_bytes = response.encode(FORMAT)  # Encode the JSON string to bytes

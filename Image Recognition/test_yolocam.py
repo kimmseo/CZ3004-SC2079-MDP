@@ -26,7 +26,7 @@ camera_index = camera_indexes[-1] if camera_indexes else 0
 cap = cv2.VideoCapture(camera_index)
 
 # Initialize YOLOv8 model
-model = YOLO('/Users/xot/Documents/UniversityWork/Y4S1/MDP/ImgRecAaron/weights/best_task2.pt')  # Replace with the path to your model
+model = YOLO('../weights/best_task2.pt')
 
 # Set the input size
 INPUT_SIZE = (720, 720)
