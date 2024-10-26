@@ -14,16 +14,14 @@ def ir_server(ir_queue, stm32_send_queue, ir_start_event, stm_start_event, shutd
 
     try:
         # Change to your laptop host ip when connected to RPI Wifi
-        # use ipconfig to find your laptop host ip 
-        HOST = '192.168.16.22' #Aaron Laptop (MDPGrp16)
-        # HOST = '192.168.16.11' #Cy Laptop (MDPGrp16)
-        #HOST = '192.168.80.27'  #Cy Laptop (RPICy)
+        # use ipconfig to find your laptop host ip
+        HOST = '192.168.19.21'
         PORT = 2030
         client = ImageRecognitionClient(HOST,PORT)  # Optionally pass host and port
         print("Connecting to Image Rec Server")
         client.connect()
         print("Connected...")
-        
+
         SNAP_COUNT = 0
 
         while SNAP_COUNT < 4 and not shutdown_event.is_set():
@@ -93,7 +91,7 @@ def STMSendServer(STM, stm32_recv_queue, stm_start_event, stm32_send_queue, stm_
     finally:
         print("Disconnecting from STM")
         STM.disconnect()
-    
+
 
 def STMRcvServer(STM, stm32_recv_queue, ir_queue, ir_start_event, stm_rcv_event, message_processed_event, shutdown_event):
     while not shutdown_event.is_set():
@@ -104,7 +102,7 @@ def STMRcvServer(STM, stm32_recv_queue, ir_queue, ir_start_event, stm_rcv_event,
             start_time = time.time()
             timeout = 5
             while True:
-                
+
                 received_msg = STM.recv()
                 if received_msg == "R":
                     print("received_msg is R")
@@ -127,9 +125,9 @@ if __name__ == "__main__":
     ir_queue = queue.Queue()
     stm32_send_queue = queue.Queue()
     stm32_recv_queue = queue.Queue()
-        
+
     # At the beginning of your main section
-    ir_start_event = threading.Event() 
+    ir_start_event = threading.Event()
     stm_start_event = threading.Event()
     stm_rcv_event = threading.Event()
     message_processed_event = threading.Event()
@@ -138,7 +136,7 @@ if __name__ == "__main__":
     #STM Server
     STM = STM32Server()
     STM.connect()
-    
+
     # Creating threads for each task
     threads = [
         threading.Thread(target=ir_server, args=(ir_queue, stm32_send_queue, ir_start_event, stm_start_event, shutdown_event)),
